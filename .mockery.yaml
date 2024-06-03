@@ -1,0 +1,10 @@
+packages:
+  github.com/kirilltitov/go-musthave-diploma/internal/storage:
+    interfaces:
+      Storage:
+        config:
+          filename: "mock_{{.InterfaceName}}.go"
+          dir: "{{.InterfaceDir}}"
+          mockname: "Mock{{.InterfaceName}}"
+          outpkg: "{{.PackageName}}"
+          inpackage: True
