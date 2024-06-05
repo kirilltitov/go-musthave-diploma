@@ -5,6 +5,7 @@ package storage
 import (
 	context "context"
 
+	decimal "github.com/shopspring/decimal"
 	mock "github.com/stretchr/testify/mock"
 )
 
@@ -64,6 +65,291 @@ func (_c *MockStorage_CreateUser_Call) Return(_a0 error) *MockStorage_CreateUser
 }
 
 func (_c *MockStorage_CreateUser_Call) RunAndReturn(run func(context.Context, User) error) *MockStorage_CreateUser_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// LoadAccount provides a mock function with given fields: ctx, user
+func (_m *MockStorage) LoadAccount(ctx context.Context, user User) (*Account, error) {
+	ret := _m.Called(ctx, user)
+
+	if len(ret) == 0 {
+		panic("no return value specified for LoadAccount")
+	}
+
+	var r0 *Account
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, User) (*Account, error)); ok {
+		return rf(ctx, user)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, User) *Account); ok {
+		r0 = rf(ctx, user)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*Account)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, User) error); ok {
+		r1 = rf(ctx, user)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// MockStorage_LoadAccount_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'LoadAccount'
+type MockStorage_LoadAccount_Call struct {
+	*mock.Call
+}
+
+// LoadAccount is a helper method to define mock.On call
+//   - ctx context.Context
+//   - user User
+func (_e *MockStorage_Expecter) LoadAccount(ctx interface{}, user interface{}) *MockStorage_LoadAccount_Call {
+	return &MockStorage_LoadAccount_Call{Call: _e.mock.On("LoadAccount", ctx, user)}
+}
+
+func (_c *MockStorage_LoadAccount_Call) Run(run func(ctx context.Context, user User)) *MockStorage_LoadAccount_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(User))
+	})
+	return _c
+}
+
+func (_c *MockStorage_LoadAccount_Call) Return(_a0 *Account, _a1 error) *MockStorage_LoadAccount_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
+}
+
+func (_c *MockStorage_LoadAccount_Call) RunAndReturn(run func(context.Context, User) (*Account, error)) *MockStorage_LoadAccount_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// LoadOrders provides a mock function with given fields: ctx, user
+func (_m *MockStorage) LoadOrders(ctx context.Context, user User) (*[]Order, error) {
+	ret := _m.Called(ctx, user)
+
+	if len(ret) == 0 {
+		panic("no return value specified for LoadOrders")
+	}
+
+	var r0 *[]Order
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, User) (*[]Order, error)); ok {
+		return rf(ctx, user)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, User) *[]Order); ok {
+		r0 = rf(ctx, user)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*[]Order)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, User) error); ok {
+		r1 = rf(ctx, user)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// MockStorage_LoadOrders_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'LoadOrders'
+type MockStorage_LoadOrders_Call struct {
+	*mock.Call
+}
+
+// LoadOrders is a helper method to define mock.On call
+//   - ctx context.Context
+//   - user User
+func (_e *MockStorage_Expecter) LoadOrders(ctx interface{}, user interface{}) *MockStorage_LoadOrders_Call {
+	return &MockStorage_LoadOrders_Call{Call: _e.mock.On("LoadOrders", ctx, user)}
+}
+
+func (_c *MockStorage_LoadOrders_Call) Run(run func(ctx context.Context, user User)) *MockStorage_LoadOrders_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(User))
+	})
+	return _c
+}
+
+func (_c *MockStorage_LoadOrders_Call) Return(_a0 *[]Order, _a1 error) *MockStorage_LoadOrders_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
+}
+
+func (_c *MockStorage_LoadOrders_Call) RunAndReturn(run func(context.Context, User) (*[]Order, error)) *MockStorage_LoadOrders_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// LoadUser provides a mock function with given fields: ctx, login
+func (_m *MockStorage) LoadUser(ctx context.Context, login string) (*User, error) {
+	ret := _m.Called(ctx, login)
+
+	if len(ret) == 0 {
+		panic("no return value specified for LoadUser")
+	}
+
+	var r0 *User
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, string) (*User, error)); ok {
+		return rf(ctx, login)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, string) *User); ok {
+		r0 = rf(ctx, login)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*User)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, string) error); ok {
+		r1 = rf(ctx, login)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// MockStorage_LoadUser_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'LoadUser'
+type MockStorage_LoadUser_Call struct {
+	*mock.Call
+}
+
+// LoadUser is a helper method to define mock.On call
+//   - ctx context.Context
+//   - login string
+func (_e *MockStorage_Expecter) LoadUser(ctx interface{}, login interface{}) *MockStorage_LoadUser_Call {
+	return &MockStorage_LoadUser_Call{Call: _e.mock.On("LoadUser", ctx, login)}
+}
+
+func (_c *MockStorage_LoadUser_Call) Run(run func(ctx context.Context, login string)) *MockStorage_LoadUser_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(string))
+	})
+	return _c
+}
+
+func (_c *MockStorage_LoadUser_Call) Return(_a0 *User, _a1 error) *MockStorage_LoadUser_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
+}
+
+func (_c *MockStorage_LoadUser_Call) RunAndReturn(run func(context.Context, string) (*User, error)) *MockStorage_LoadUser_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// LoadWithdrawals provides a mock function with given fields: ctx, user
+func (_m *MockStorage) LoadWithdrawals(ctx context.Context, user User) (*[]Withdrawal, error) {
+	ret := _m.Called(ctx, user)
+
+	if len(ret) == 0 {
+		panic("no return value specified for LoadWithdrawals")
+	}
+
+	var r0 *[]Withdrawal
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, User) (*[]Withdrawal, error)); ok {
+		return rf(ctx, user)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, User) *[]Withdrawal); ok {
+		r0 = rf(ctx, user)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*[]Withdrawal)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, User) error); ok {
+		r1 = rf(ctx, user)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// MockStorage_LoadWithdrawals_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'LoadWithdrawals'
+type MockStorage_LoadWithdrawals_Call struct {
+	*mock.Call
+}
+
+// LoadWithdrawals is a helper method to define mock.On call
+//   - ctx context.Context
+//   - user User
+func (_e *MockStorage_Expecter) LoadWithdrawals(ctx interface{}, user interface{}) *MockStorage_LoadWithdrawals_Call {
+	return &MockStorage_LoadWithdrawals_Call{Call: _e.mock.On("LoadWithdrawals", ctx, user)}
+}
+
+func (_c *MockStorage_LoadWithdrawals_Call) Run(run func(ctx context.Context, user User)) *MockStorage_LoadWithdrawals_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(User))
+	})
+	return _c
+}
+
+func (_c *MockStorage_LoadWithdrawals_Call) Return(_a0 *[]Withdrawal, _a1 error) *MockStorage_LoadWithdrawals_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
+}
+
+func (_c *MockStorage_LoadWithdrawals_Call) RunAndReturn(run func(context.Context, User) (*[]Withdrawal, error)) *MockStorage_LoadWithdrawals_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// WithdrawBalanceFromAccount provides a mock function with given fields: ctx, user, amount, order
+func (_m *MockStorage) WithdrawBalanceFromAccount(ctx context.Context, user User, amount decimal.Decimal, order string) error {
+	ret := _m.Called(ctx, user, amount, order)
+
+	if len(ret) == 0 {
+		panic("no return value specified for WithdrawBalanceFromAccount")
+	}
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, User, decimal.Decimal, string) error); ok {
+		r0 = rf(ctx, user, amount, order)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// MockStorage_WithdrawBalanceFromAccount_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'WithdrawBalanceFromAccount'
+type MockStorage_WithdrawBalanceFromAccount_Call struct {
+	*mock.Call
+}
+
+// WithdrawBalanceFromAccount is a helper method to define mock.On call
+//   - ctx context.Context
+//   - user User
+//   - amount decimal.Decimal
+//   - order string
+func (_e *MockStorage_Expecter) WithdrawBalanceFromAccount(ctx interface{}, user interface{}, amount interface{}, order interface{}) *MockStorage_WithdrawBalanceFromAccount_Call {
+	return &MockStorage_WithdrawBalanceFromAccount_Call{Call: _e.mock.On("WithdrawBalanceFromAccount", ctx, user, amount, order)}
+}
+
+func (_c *MockStorage_WithdrawBalanceFromAccount_Call) Run(run func(ctx context.Context, user User, amount decimal.Decimal, order string)) *MockStorage_WithdrawBalanceFromAccount_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(User), args[2].(decimal.Decimal), args[3].(string))
+	})
+	return _c
+}
+
+func (_c *MockStorage_WithdrawBalanceFromAccount_Call) Return(_a0 error) *MockStorage_WithdrawBalanceFromAccount_Call {
+	_c.Call.Return(_a0)
+	return _c
+}
+
+func (_c *MockStorage_WithdrawBalanceFromAccount_Call) RunAndReturn(run func(context.Context, User, decimal.Decimal, string) error) *MockStorage_WithdrawBalanceFromAccount_Call {
 	_c.Call.Return(run)
 	return _c
 }

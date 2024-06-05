@@ -13,11 +13,13 @@ import (
 
 	"github.com/kirilltitov/go-musthave-diploma/internal/config"
 	"github.com/kirilltitov/go-musthave-diploma/internal/container"
+	"github.com/kirilltitov/go-musthave-diploma/internal/gophermart"
 	"github.com/kirilltitov/go-musthave-diploma/internal/storage"
+	"github.com/kirilltitov/go-musthave-diploma/internal/utils"
 )
 
-func TestApplication_HandlerRegister(t *testing.T) {
-	cfg := config.Config{}
+func TestApplication_HandlerLogin(t *testing.T) {
+	cfg := config.New()
 	ctx := context.Background()
 	cnt := container.Container{Storage: nil}
 
@@ -50,57 +52,58 @@ func TestApplication_HandlerRegister(t *testing.T) {
 		{
 			name: "Negative (invalid request 2)",
 			input: input{
-				body:    `{}`,
-				storage: storage.NewMockStorage(t),
+				body: `{}`,
+				storage: func() storage.Storage {
+					s := storage.NewMockStorage(t)
+					s.
+						EXPECT().
+						LoadUser(mock.Anything, mock.Anything).
+						Return(nil, gophermart.ErrAuthFailed)
+					return s
+				}(),
 			},
 			want: want{
-				code: 400,
+				code: 401,
 			},
 		},
 		{
 			name: "Negative (invalid request 3)",
 			input: input{
-				body:    `{"login":"frankstrino","passworddd":"hesoyam"}`,
-				storage: storage.NewMockStorage(t),
+				body: `{"login":"frankstrino","passworddd":"hesoyam"}`,
+				storage: func() storage.Storage {
+					s := storage.NewMockStorage(t)
+					s.
+						EXPECT().
+						LoadUser(mock.Anything, mock.Anything).
+						Return(nil, gophermart.ErrAuthFailed)
+					return s
+				}(),
 			},
 			want: want{
-				code: 400,
+				code: 401,
 			},
 		},
 		{
 			name: "Positive",
-			input: input{
-				body: `{"login":"frankstrino","password":"hesoyam"}`,
-				storage: func() storage.Storage {
-					s := storage.NewMockStorage(t)
-					s.
-						EXPECT().
-						CreateUser(mock.Anything, mock.Anything).
-						Return(nil)
-					return s
-				}(),
-			},
+			input: func() input {
+				userID := utils.NewUUID6()
+				user := storage.NewUser(userID, "frankstrino", "hesoyam")
+
+				return input{
+					body: `{"login":"frankstrino","password":"hesoyam"}`,
+					storage: func() storage.Storage {
+						s := storage.NewMockStorage(t)
+						s.
+							EXPECT().
+							LoadUser(mock.Anything, mock.Anything).
+							Return(&user, nil)
+						return s
+					}(),
+				}
+			}(),
 			want: want{
 				code:      200,
 				cookieSet: true,
-			},
-		},
-		{
-			name: "Negative (duplicate)",
-			input: input{
-				body: `{"login":"frankstrino","password":"hesoyam"}`,
-				storage: func() storage.Storage {
-					s := storage.NewMockStorage(t)
-					s.
-						EXPECT().
-						CreateUser(mock.Anything, mock.Anything).
-						Return(storage.ErrDuplicateFound)
-					return s
-				}(),
-			},
-			want: want{
-				code:      409,
-				cookieSet: false,
 			},
 		},
 	}
@@ -108,10 +111,10 @@ func TestApplication_HandlerRegister(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			a.Container.Storage = tt.input.storage
-			r := httptest.NewRequest(http.MethodPost, "/api/user/register", bytes.NewReader([]byte(tt.input.body)))
+			r := httptest.NewRequest(http.MethodPost, "/api/user/login", bytes.NewReader([]byte(tt.input.body)))
 			w := httptest.NewRecorder()
 
-			a.HandlerRegister(w, r)
+			a.HandlerLogin(w, r)
 
 			result := w.Result()
 

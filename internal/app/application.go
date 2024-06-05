@@ -51,6 +51,12 @@ func (a *Application) createRouter() chi.Router {
 	router := chi.NewRouter()
 
 	router.Post("/api/user/register", a.HandlerRegister)
+	router.Post("/api/user/login", a.HandlerLogin)
+	//router.Post("/api/user/orders", a.HandlerCreateOrder)
+	router.Get("/api/user/orders", a.HandlerGetOrders)
+	router.Get("/api/user/balance", a.HandlerGetBalance)
+	router.Post("/api/user/balance/withdraw", a.HandlerWithdrawBalance)
+	router.Post("/api/user/withdrawals", a.HandlerGetWithdrawals)
 
 	return router
 }

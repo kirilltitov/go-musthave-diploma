@@ -4,12 +4,11 @@ import (
 	"context"
 
 	"github.com/kirilltitov/go-musthave-diploma/internal/storage"
-
-	"github.com/google/uuid"
+	"github.com/kirilltitov/go-musthave-diploma/internal/utils"
 )
 
 func (g Gophermart) Register(ctx context.Context, login string, rawPassword string) (*storage.User, error) {
-	userID, _ := uuid.NewV6()
+	userID := utils.NewUUID6()
 	user := storage.NewUser(userID, login, rawPassword)
 
 	if login == "" {

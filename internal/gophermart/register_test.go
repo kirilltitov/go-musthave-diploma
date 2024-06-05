@@ -12,7 +12,7 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
-func TestApplication_HandlerRegister(t *testing.T) {
+func TestGophermart_Register(t *testing.T) {
 	cfg := config.New()
 	ctx := context.Background()
 	cnt := container.Container{Storage: nil}

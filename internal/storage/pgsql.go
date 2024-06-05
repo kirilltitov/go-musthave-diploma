@@ -44,3 +44,11 @@ func WithTransaction[T any](ctx context.Context, pg PgSQL, f func(pgx.Tx) (*T, e
 
 	return result, nil
 }
+
+func WithVoidTransaction(ctx context.Context, pg PgSQL, f func(pgx.Tx) error) error {
+	_, err := WithTransaction(ctx, pg, func(tx pgx.Tx) (*any, error) {
+		return nil, f(tx)
+	})
+
+	return err
+}

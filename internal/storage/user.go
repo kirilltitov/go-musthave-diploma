@@ -21,23 +21,32 @@ type User struct {
 	CreatedAt time.Time `db:"created_at"`
 }
 
+func (u User) IsValidPassword(password string) bool {
+	return u.getHashedPassword(password) == u.Password
+}
+
+func (u User) getHashedPassword(rawPassword string) string {
+	h := sha1.New()
+	io.WriteString(h, rawPassword)
+	io.WriteString(h, strconv.FormatInt(u.CreatedAt.Unix(), 10))
+
+	result := hex.EncodeToString(h.Sum(nil))
+	return result
+}
+
 func NewUser(ID uuid.UUID, login string, rawPassword string) User {
 	user := User{
 		ID:        ID,
 		Login:     login,
-		CreatedAt: time.Time{},
+		CreatedAt: time.Now(),
 	}
 
-	h := sha1.New()
-	io.WriteString(h, rawPassword)
-	io.WriteString(h, strconv.FormatInt(user.CreatedAt.Unix(), 10))
-
-	user.Password = hex.EncodeToString(h.Sum(nil))
+	user.Password = user.getHashedPassword(rawPassword)
 
 	return user
 }
 
-func LoadUser(ctx context.Context, querier pgxscan.Querier, login string) (*User, error) {
+func loadUser(ctx context.Context, querier pgxscan.Querier, login string) (*User, error) {
 	var row User
 
 	if err := pgxscan.Get(ctx, querier, &row, `select * from public.user where login = $1`, login); err != nil {
@@ -51,7 +60,7 @@ func LoadUser(ctx context.Context, querier pgxscan.Querier, login string) (*User
 	return &row, nil
 }
 
-func insertUser(ctx context.Context, querier pgxscan.Querier, user User) error {
+func createUser(ctx context.Context, querier pgxscan.Querier, user User) error {
 	query := `insert into public.user (id, login, password, created_at) values ($1, $2, $3, $4)`
 	_, err := querier.Query(ctx, query, user.ID, user.Login, user.Password, user.CreatedAt)
 	if err != nil {
@@ -61,9 +70,13 @@ func insertUser(ctx context.Context, querier pgxscan.Querier, user User) error {
 	return nil
 }
 
+func (s PgSQL) LoadUser(ctx context.Context, login string) (*User, error) {
+	return loadUser(ctx, s.Conn, login)
+}
+
 func (s PgSQL) CreateUser(ctx context.Context, user User) error {
 	_, err := WithTransaction(ctx, s, func(tx pgx.Tx) (*any, error) {
-		existingUser, err := LoadUser(ctx, tx, user.Login)
+		existingUser, err := loadUser(ctx, tx, user.Login)
 		if err != nil {
 			return nil, err
 		}
@@ -71,7 +84,10 @@ func (s PgSQL) CreateUser(ctx context.Context, user User) error {
 			return nil, ErrDuplicateFound
 		}
 
-		if err := insertUser(ctx, tx, user); err != nil {
+		if err := createUser(ctx, tx, user); err != nil {
+			return nil, err
+		}
+		if err := createAccount(ctx, tx, user); err != nil {
 			return nil, err
 		}
 
