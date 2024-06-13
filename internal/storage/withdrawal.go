@@ -74,8 +74,8 @@ func (s PgSQL) WithdrawBalanceFromAccount(ctx context.Context, user User, amount
 	})
 }
 
-func createWithdrawal(ctx context.Context, querier pgxscan.Querier, withdrawal Withdrawal) error {
-	_, err := querier.Query(
+func createWithdrawal(ctx context.Context, tx pgx.Tx, withdrawal Withdrawal) error {
+	_, err := tx.Exec(
 		ctx,
 		`insert into public.withdrawal (id, user_id, order_number, amount, created_at) values ($1, $2, $3, $4, $5)`,
 		withdrawal.ID,

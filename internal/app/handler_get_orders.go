@@ -4,16 +4,18 @@ import (
 	"encoding/json"
 	"net/http"
 	"time"
+
+	"github.com/kirilltitov/go-musthave-diploma/internal/storage"
 )
 
 func (a *Application) HandlerGetOrders(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	type row struct {
-		Number     string    `json:"number"`
-		Status     string    `json:"status"`
-		Accrual    float64   `json:"accrual"`
-		UploadedAt time.Time `json:"uploaded_at"`
+		Number     string              `json:"number"`
+		Status     storage.OrderStatus `json:"status"`
+		Accrual    float64             `json:"accrual"`
+		UploadedAt time.Time           `json:"uploaded_at"`
 	}
 
 	user, err := a.authenticate(r)

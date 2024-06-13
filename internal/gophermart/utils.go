@@ -9,7 +9,7 @@ import (
 func validateOrderNumber(order string) error {
 	orderInt, err := strconv.Atoi(order)
 	if err != nil || !luhn.Valid(orderInt) {
-		return ErrInvalidOrder
+		return ErrInvalidOrderNumber
 	}
 
 	return nil

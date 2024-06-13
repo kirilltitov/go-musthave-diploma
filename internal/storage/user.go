@@ -12,6 +12,8 @@ import (
 	"github.com/georgysavva/scany/v2/pgxscan"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
+
+	"github.com/kirilltitov/go-musthave-diploma/internal/utils"
 )
 
 type User struct {
@@ -26,11 +28,16 @@ func (u User) IsValidPassword(password string) bool {
 }
 
 func (u User) getHashedPassword(rawPassword string) string {
+	dt := strconv.FormatInt(u.CreatedAt.Unix(), 10)
+
 	h := sha1.New()
 	io.WriteString(h, rawPassword)
-	io.WriteString(h, strconv.FormatInt(u.CreatedAt.Unix(), 10))
+	io.WriteString(h, dt)
 
 	result := hex.EncodeToString(h.Sum(nil))
+
+	utils.Log.Infof("Hashing sha1('%s' + '%s') = '%s'", rawPassword, dt, result)
+
 	return result
 }
 
@@ -46,10 +53,10 @@ func NewUser(ID uuid.UUID, login string, rawPassword string) User {
 	return user
 }
 
-func loadUser(ctx context.Context, querier pgxscan.Querier, login string) (*User, error) {
+func loadUser(ctx context.Context, tx pgx.Tx, login string) (*User, error) {
 	var row User
 
-	if err := pgxscan.Get(ctx, querier, &row, `select * from public.user where login = $1`, login); err != nil {
+	if err := pgxscan.Get(ctx, tx, &row, `select * from public.user where login = $1`, login); err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
 			return nil, ErrNotFound
 		} else {
@@ -60,9 +67,9 @@ func loadUser(ctx context.Context, querier pgxscan.Querier, login string) (*User
 	return &row, nil
 }
 
-func createUser(ctx context.Context, querier pgxscan.Querier, user User) error {
+func createUser(ctx context.Context, tx pgx.Tx, user User) error {
 	query := `insert into public.user (id, login, password, created_at) values ($1, $2, $3, $4)`
-	_, err := querier.Query(ctx, query, user.ID, user.Login, user.Password, user.CreatedAt)
+	_, err := tx.Exec(ctx, query, user.ID, user.Login, user.Password, user.CreatedAt)
 	if err != nil {
 		return err
 	}
@@ -71,13 +78,15 @@ func createUser(ctx context.Context, querier pgxscan.Querier, user User) error {
 }
 
 func (s PgSQL) LoadUser(ctx context.Context, login string) (*User, error) {
-	return loadUser(ctx, s.Conn, login)
+	return WithTransaction(ctx, s, func(tx pgx.Tx) (*User, error) {
+		return loadUser(ctx, tx, login)
+	})
 }
 
 func (s PgSQL) CreateUser(ctx context.Context, user User) error {
 	_, err := WithTransaction(ctx, s, func(tx pgx.Tx) (*any, error) {
 		existingUser, err := loadUser(ctx, tx, user.Login)
-		if err != nil {
+		if err != nil && !errors.Is(err, ErrNotFound) {
 			return nil, err
 		}
 		if existingUser != nil {

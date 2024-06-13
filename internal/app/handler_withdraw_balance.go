@@ -34,7 +34,7 @@ func (a *Application) HandlerWithdrawBalance(w http.ResponseWriter, r *http.Requ
 	if err := a.Gophermart.WithdrawBalanceFromAccount(r.Context(), *user, req.Sum, req.Order); err != nil {
 		log.Infof("Error while withdrawing from account: %v", err)
 		var code int
-		if errors.Is(err, gophermart.ErrInvalidOrder) {
+		if errors.Is(err, gophermart.ErrInvalidOrderNumber) {
 			code = http.StatusUnprocessableEntity
 		} else if errors.Is(err, storage.ErrInsufficientBalance) {
 			code = http.StatusPaymentRequired

@@ -4,12 +4,12 @@ import (
 	"context"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
+
 	"github.com/kirilltitov/go-musthave-diploma/internal/config"
 	"github.com/kirilltitov/go-musthave-diploma/internal/container"
 	"github.com/kirilltitov/go-musthave-diploma/internal/storage"
-
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
 )
 
 func TestGophermart_Register(t *testing.T) {

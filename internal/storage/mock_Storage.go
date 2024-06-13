@@ -22,6 +22,102 @@ func (_m *MockStorage) EXPECT() *MockStorage_Expecter {
 	return &MockStorage_Expecter{mock: &_m.Mock}
 }
 
+// ApplyProcessedOrder provides a mock function with given fields: ctx, user, order, amount
+func (_m *MockStorage) ApplyProcessedOrder(ctx context.Context, user User, order Order, amount decimal.Decimal) error {
+	ret := _m.Called(ctx, user, order, amount)
+
+	if len(ret) == 0 {
+		panic("no return value specified for ApplyProcessedOrder")
+	}
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, User, Order, decimal.Decimal) error); ok {
+		r0 = rf(ctx, user, order, amount)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// MockStorage_ApplyProcessedOrder_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'ApplyProcessedOrder'
+type MockStorage_ApplyProcessedOrder_Call struct {
+	*mock.Call
+}
+
+// ApplyProcessedOrder is a helper method to define mock.On call
+//   - ctx context.Context
+//   - user User
+//   - order Order
+//   - amount decimal.Decimal
+func (_e *MockStorage_Expecter) ApplyProcessedOrder(ctx interface{}, user interface{}, order interface{}, amount interface{}) *MockStorage_ApplyProcessedOrder_Call {
+	return &MockStorage_ApplyProcessedOrder_Call{Call: _e.mock.On("ApplyProcessedOrder", ctx, user, order, amount)}
+}
+
+func (_c *MockStorage_ApplyProcessedOrder_Call) Run(run func(ctx context.Context, user User, order Order, amount decimal.Decimal)) *MockStorage_ApplyProcessedOrder_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(User), args[2].(Order), args[3].(decimal.Decimal))
+	})
+	return _c
+}
+
+func (_c *MockStorage_ApplyProcessedOrder_Call) Return(_a0 error) *MockStorage_ApplyProcessedOrder_Call {
+	_c.Call.Return(_a0)
+	return _c
+}
+
+func (_c *MockStorage_ApplyProcessedOrder_Call) RunAndReturn(run func(context.Context, User, Order, decimal.Decimal) error) *MockStorage_ApplyProcessedOrder_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// CreateOrder provides a mock function with given fields: ctx, order
+func (_m *MockStorage) CreateOrder(ctx context.Context, order Order) error {
+	ret := _m.Called(ctx, order)
+
+	if len(ret) == 0 {
+		panic("no return value specified for CreateOrder")
+	}
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, Order) error); ok {
+		r0 = rf(ctx, order)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// MockStorage_CreateOrder_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'CreateOrder'
+type MockStorage_CreateOrder_Call struct {
+	*mock.Call
+}
+
+// CreateOrder is a helper method to define mock.On call
+//   - ctx context.Context
+//   - order Order
+func (_e *MockStorage_Expecter) CreateOrder(ctx interface{}, order interface{}) *MockStorage_CreateOrder_Call {
+	return &MockStorage_CreateOrder_Call{Call: _e.mock.On("CreateOrder", ctx, order)}
+}
+
+func (_c *MockStorage_CreateOrder_Call) Run(run func(ctx context.Context, order Order)) *MockStorage_CreateOrder_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(Order))
+	})
+	return _c
+}
+
+func (_c *MockStorage_CreateOrder_Call) Return(_a0 error) *MockStorage_CreateOrder_Call {
+	_c.Call.Return(_a0)
+	return _c
+}
+
+func (_c *MockStorage_CreateOrder_Call) RunAndReturn(run func(context.Context, Order) error) *MockStorage_CreateOrder_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // CreateUser provides a mock function with given fields: ctx, user
 func (_m *MockStorage) CreateUser(ctx context.Context, user User) error {
 	ret := _m.Called(ctx, user)
@@ -124,6 +220,65 @@ func (_c *MockStorage_LoadAccount_Call) Return(_a0 *Account, _a1 error) *MockSto
 }
 
 func (_c *MockStorage_LoadAccount_Call) RunAndReturn(run func(context.Context, User) (*Account, error)) *MockStorage_LoadAccount_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// LoadOrder provides a mock function with given fields: ctx, orderNumber
+func (_m *MockStorage) LoadOrder(ctx context.Context, orderNumber string) (*Order, error) {
+	ret := _m.Called(ctx, orderNumber)
+
+	if len(ret) == 0 {
+		panic("no return value specified for LoadOrder")
+	}
+
+	var r0 *Order
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, string) (*Order, error)); ok {
+		return rf(ctx, orderNumber)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, string) *Order); ok {
+		r0 = rf(ctx, orderNumber)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*Order)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, string) error); ok {
+		r1 = rf(ctx, orderNumber)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// MockStorage_LoadOrder_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'LoadOrder'
+type MockStorage_LoadOrder_Call struct {
+	*mock.Call
+}
+
+// LoadOrder is a helper method to define mock.On call
+//   - ctx context.Context
+//   - orderNumber string
+func (_e *MockStorage_Expecter) LoadOrder(ctx interface{}, orderNumber interface{}) *MockStorage_LoadOrder_Call {
+	return &MockStorage_LoadOrder_Call{Call: _e.mock.On("LoadOrder", ctx, orderNumber)}
+}
+
+func (_c *MockStorage_LoadOrder_Call) Run(run func(ctx context.Context, orderNumber string)) *MockStorage_LoadOrder_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(string))
+	})
+	return _c
+}
+
+func (_c *MockStorage_LoadOrder_Call) Return(_a0 *Order, _a1 error) *MockStorage_LoadOrder_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
+}
+
+func (_c *MockStorage_LoadOrder_Call) RunAndReturn(run func(context.Context, string) (*Order, error)) *MockStorage_LoadOrder_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -301,6 +456,55 @@ func (_c *MockStorage_LoadWithdrawals_Call) Return(_a0 *[]Withdrawal, _a1 error)
 }
 
 func (_c *MockStorage_LoadWithdrawals_Call) RunAndReturn(run func(context.Context, User) (*[]Withdrawal, error)) *MockStorage_LoadWithdrawals_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// UpdateOrderStatus provides a mock function with given fields: ctx, order, newStatus, allowedOldStatuses
+func (_m *MockStorage) UpdateOrderStatus(ctx context.Context, order Order, newStatus OrderStatus, allowedOldStatuses []OrderStatus) error {
+	ret := _m.Called(ctx, order, newStatus, allowedOldStatuses)
+
+	if len(ret) == 0 {
+		panic("no return value specified for UpdateOrderStatus")
+	}
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, Order, OrderStatus, []OrderStatus) error); ok {
+		r0 = rf(ctx, order, newStatus, allowedOldStatuses)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// MockStorage_UpdateOrderStatus_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'UpdateOrderStatus'
+type MockStorage_UpdateOrderStatus_Call struct {
+	*mock.Call
+}
+
+// UpdateOrderStatus is a helper method to define mock.On call
+//   - ctx context.Context
+//   - order Order
+//   - newStatus OrderStatus
+//   - allowedOldStatuses []OrderStatus
+func (_e *MockStorage_Expecter) UpdateOrderStatus(ctx interface{}, order interface{}, newStatus interface{}, allowedOldStatuses interface{}) *MockStorage_UpdateOrderStatus_Call {
+	return &MockStorage_UpdateOrderStatus_Call{Call: _e.mock.On("UpdateOrderStatus", ctx, order, newStatus, allowedOldStatuses)}
+}
+
+func (_c *MockStorage_UpdateOrderStatus_Call) Run(run func(ctx context.Context, order Order, newStatus OrderStatus, allowedOldStatuses []OrderStatus)) *MockStorage_UpdateOrderStatus_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(Order), args[2].(OrderStatus), args[3].([]OrderStatus))
+	})
+	return _c
+}
+
+func (_c *MockStorage_UpdateOrderStatus_Call) Return(_a0 error) *MockStorage_UpdateOrderStatus_Call {
+	_c.Call.Return(_a0)
+	return _c
+}
+
+func (_c *MockStorage_UpdateOrderStatus_Call) RunAndReturn(run func(context.Context, Order, OrderStatus, []OrderStatus) error) *MockStorage_UpdateOrderStatus_Call {
 	_c.Call.Return(run)
 	return _c
 }
