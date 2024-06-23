@@ -64,7 +64,7 @@ func (a ExternalAccrual) CalculateAmount(order storage.Order) (*CalculationResul
 	}
 
 	if err := json.Unmarshal(buf.Bytes(), &result); err != nil {
-		logger.Infof("Could not parse JSON from '%s': %+v", string(buf.Bytes()), err)
+		logger.Infof("Could not parse JSON from '%s': %+v", buf.String(), err)
 		return nil, err
 	}
 

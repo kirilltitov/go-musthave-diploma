@@ -88,18 +88,24 @@ func TestApplication_HandlerGetOrders(t *testing.T) {
 							OrderNumber: "123",
 							UserID:      userID,
 							Status:      storage.StatusNew,
-							Amount:      decimal.NewFromFloat(13.37),
-							CreatedAt:   time.Now(),
-							UpdatedAt:   nil,
+							Amount: func() *decimal.Decimal {
+								r := decimal.NewFromFloat(13.37)
+								return &r
+							}(),
+							CreatedAt: time.Now(),
+							UpdatedAt: nil,
 						},
 						{
 							ID:          utils.NewUUID6(),
 							OrderNumber: "456",
 							UserID:      userID,
 							Status:      storage.StatusProcessed,
-							Amount:      decimal.NewFromFloat(3.22),
-							CreatedAt:   time.Now(),
-							UpdatedAt:   nil,
+							Amount: func() *decimal.Decimal {
+								r := decimal.NewFromFloat(3.22)
+								return &r
+							}(),
+							CreatedAt: time.Now(),
+							UpdatedAt: nil,
 						},
 					}
 					s := storage.NewMockStorage(t)

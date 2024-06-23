@@ -24,7 +24,7 @@ func TestApplication_HandlerCreateOrder(t *testing.T) {
 	ctx := context.Background()
 
 	accrualMock := accrual.NewMockAccrual(t)
-	accrualMock.EXPECT().CalculateAmount(mock.Anything).Return(nil, accrual.ErrNoOrder)
+	accrualMock.EXPECT().CalculateAmount(mock.Anything).Maybe().Return(nil, accrual.ErrNoOrder)
 	cnt := container.Container{Storage: nil, Accrual: accrualMock}
 
 	a, err := New(ctx, cfg, &cnt)
@@ -110,7 +110,7 @@ func TestApplication_HandlerCreateOrder(t *testing.T) {
 			},
 		},
 		{
-			name: "Positive",
+			name: "Negative (500)",
 			input: input{
 				cookie: func() *http.Cookie {
 					cookie, _ := a.createAuthCookie(user)
@@ -135,7 +135,7 @@ func TestApplication_HandlerCreateOrder(t *testing.T) {
 			},
 		},
 		{
-			name: "Positive (already created)",
+			name: "Positive 1 (200, already created)",
 			input: input{
 				cookie: func() *http.Cookie {
 					cookie, _ := a.createAuthCookie(user)
@@ -156,7 +156,7 @@ func TestApplication_HandlerCreateOrder(t *testing.T) {
 			},
 		},
 		{
-			name: "Positive",
+			name: "Positive 2 (202)",
 			input: input{
 				cookie: func() *http.Cookie {
 					cookie, _ := a.createAuthCookie(user)
