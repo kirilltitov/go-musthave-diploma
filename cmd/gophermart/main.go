@@ -9,7 +9,7 @@ import (
 )
 
 func run() error {
-	utils.Log.Infof("Hello")
+	utils.Log.Infof("Hello from run")
 
 	cfg := config.New()
 	ctx := context.Background()
@@ -25,6 +25,8 @@ func run() error {
 }
 
 func main() {
+	utils.Log.Infof("Hello from main")
+
 	if err := run(); err != nil {
 		panic(err)
 	}
