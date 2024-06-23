@@ -18,7 +18,17 @@ const (
 )
 
 type CalculationResult struct {
-	Order   string           `json:"order"`
-	Status  string           `json:"status"`
-	Accrual *decimal.Decimal `json:"accrual"`
+	Order      string   `json:"order"`
+	Status     string   `json:"status"`
+	AccrualRaw *float64 `json:"accrual"`
+}
+
+func (r CalculationResult) Accrual() *decimal.Decimal {
+	if r.AccrualRaw == nil {
+		return nil
+	}
+
+	result := decimal.NewFromFloat(*r.AccrualRaw)
+
+	return &result
 }

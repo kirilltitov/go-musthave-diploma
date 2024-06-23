@@ -36,7 +36,7 @@ func (u User) getHashedPassword(rawPassword string) string {
 
 	result := hex.EncodeToString(h.Sum(nil))
 
-	utils.Log.Infof("Hashing sha1('%s' + '%s') = '%s'", rawPassword, dt, result)
+	utils.Log.Debugf("Hashing sha1('%s' + '%s') = '%s'", rawPassword, dt, result)
 
 	return result
 }

@@ -14,7 +14,7 @@ create table public."order"
     order_number varchar        not null constraint order_number_key unique,
     user_id      uuid           not null,
     status       order_status   not null,
-    amount       numeric(10, 2) not null,
+    amount       numeric(10, 2) default null,
     created_at   timestamptz    not null,
     updated_at   timestamptz
 );

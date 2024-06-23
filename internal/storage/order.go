@@ -24,13 +24,13 @@ const (
 )
 
 type Order struct {
-	ID          uuid.UUID       `db:"id"`
-	OrderNumber string          `db:"order_number"`
-	UserID      uuid.UUID       `db:"user_id"`
-	Status      OrderStatus     `db:"status"`
-	Amount      decimal.Decimal `db:"amount"`
-	CreatedAt   time.Time       `db:"created_at"`
-	UpdatedAt   *time.Time      `db:"updated_at"`
+	ID          uuid.UUID        `db:"id"`
+	OrderNumber string           `db:"order_number"`
+	UserID      uuid.UUID        `db:"user_id"`
+	Status      OrderStatus      `db:"status"`
+	Amount      *decimal.Decimal `db:"amount"`
+	CreatedAt   time.Time        `db:"created_at"`
+	UpdatedAt   *time.Time       `db:"updated_at"`
 }
 
 func (s PgSQL) LoadOrders(ctx context.Context, user User) (*[]Order, error) {
@@ -109,23 +109,31 @@ func updateOrderStatus(ctx context.Context, tx pgx.Tx, order Order, newStatus Or
 		return ErrWrongStatus(orderFromDB.Status)
 	}
 
-	if _, err := tx.Exec(
+	res, err := tx.Exec(
 		ctx,
 		`update public.order set status = $1, updated_at = NOW() where ID = $2`,
 		newStatus, order.ID,
-	); err != nil {
+	)
+	if err != nil {
 		return err
 	}
+
+	utils.Log.Debugf("Order status update result: %+v", res)
+
 	return nil
 }
 
 func updateOrderAmount(ctx context.Context, tx pgx.Tx, order Order) error {
-	if _, err := tx.Exec(
+	res, err := tx.Exec(
 		ctx,
 		`update public.order set amount = $1, updated_at = NOW() where ID = $2`,
-		order.Amount, order.ID,
-	); err != nil {
+		order.Amount.InexactFloat64(), order.ID,
+	)
+	if err != nil {
 		return err
 	}
+
+	utils.Log.Debugf("Order amount update result: %+v", res)
+
 	return nil
 }

@@ -53,7 +53,7 @@ func (a ExternalAccrual) CalculateAmount(order storage.Order) (*CalculationResul
 		return nil, result
 	}
 
-	var result *CalculationResult
+	var result CalculationResult
 
 	var buf bytes.Buffer
 	defer resp.Body.Close()
@@ -62,12 +62,15 @@ func (a ExternalAccrual) CalculateAmount(order storage.Order) (*CalculationResul
 		logger.Infof("Could not get body: %v", err)
 		return nil, err
 	}
-	if err := json.Unmarshal(buf.Bytes(), result); err != nil {
-		logger.Infof("Could not parse JSON: %v", err)
+
+	if err := json.Unmarshal(buf.Bytes(), &result); err != nil {
+		logger.Infof("Could not parse JSON from '%s': %+v", string(buf.Bytes()), err)
 		return nil, err
 	}
 
-	return result, nil
+	utils.Log.WithField("response", result).Infof("Response from external accrual system")
+
+	return &result, nil
 }
 
 func NewExternalAccrual(cfg ExternalAccrualConfig) Accrual {

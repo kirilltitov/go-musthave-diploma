@@ -10,6 +10,8 @@ import (
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 	"github.com/shopspring/decimal"
+
+	"github.com/kirilltitov/go-musthave-diploma/internal/utils"
 )
 
 type Account struct {
@@ -26,37 +28,47 @@ func (s PgSQL) LoadAccount(ctx context.Context, user User) (*Account, error) {
 
 func (s PgSQL) ApplyProcessedOrder(ctx context.Context, user User, order Order, amount decimal.Decimal) error {
 	return WithVoidTransaction(ctx, s, func(tx pgx.Tx) error {
+		log := utils.Log.WithField("order_number", order.OrderNumber)
+
 		account, err := loadAccount(ctx, tx, user, true, true)
 		if err != nil {
 			return err
 		}
 
-		account.CurrentBalance.Add(amount)
+		account.CurrentBalance = account.CurrentBalance.Add(amount)
 		if err := saveAccount(ctx, tx, *account); err != nil {
 			return err
 		}
+		log.Debugf("Updated account")
 
-		order.Amount = amount
+		order.Amount = &amount
 		if err := updateOrderAmount(ctx, tx, order); err != nil {
 			return err
 		}
+		log.Debugf("Updated order amount")
 		if err := updateOrderStatus(ctx, tx, order, StatusProcessed, []OrderStatus{StatusNew, StatusProcessing, StatusProcessed}); err != nil {
 			return err
 		}
+		log.Debugf("Updated order status")
 
 		return tx.Commit(ctx)
 	})
 }
 
 func saveAccount(ctx context.Context, tx pgx.Tx, account Account) error {
-	_, err := tx.Exec(
+	utils.Log.Debugf("About to update account %s with current balance = %f and withdrawn balance = %f", account.UserID, account.CurrentBalance.InexactFloat64(), account.WithdrawnBalance.InexactFloat64())
+
+	res, err := tx.Exec(
 		ctx,
 		`update public.account set current_balance = $1, withdrawn_balance = $2 where user_id = $3`,
-		account.CurrentBalance, account.WithdrawnBalance, account.UserID,
+		account.CurrentBalance.InexactFloat64(), account.WithdrawnBalance.InexactFloat64(), account.UserID,
 	)
 	if err != nil {
 		return err
 	}
+
+	utils.Log.Debugf("Account update result: %+v", res)
+
 	return nil
 }
 

@@ -37,18 +37,20 @@ func (g Gophermart) CreateOrder(ctx context.Context, user storage.User, orderNum
 		return err
 	}
 
-	g.acquireBalanceForOrder(ctx, user, order)
+	g.acquireBalanceForOrder(user, order)
 
 	return nil
 }
 
-func (g Gophermart) acquireBalanceForOrder(ctx context.Context, user storage.User, order storage.Order) {
+func (g Gophermart) acquireBalanceForOrder(user storage.User, order storage.Order) {
 	logger := utils.Log
 	retries := 10
 	var timeout time.Duration = 10
 
 	go func() {
 		for i := 0; i < retries; i++ {
+			ctx := context.Background()
+
 			result, err := g.container.Accrual.CalculateAmount(order)
 			if err != nil {
 				if errors.Is(err, accrual.ErrNoOrder) {
@@ -112,7 +114,7 @@ func (g Gophermart) acquireBalanceForOrder(ctx context.Context, user storage.Use
 			case accrual.StatusProcessed:
 				logger.Infof("Order has been processed, saving")
 
-				if result.Accrual == nil {
+				if result.AccrualRaw == nil {
 					logger.Errorf(
 						"Could not apply acrrual amount to account because accrual response does not contain amount: %v",
 						result,
@@ -124,7 +126,7 @@ func (g Gophermart) acquireBalanceForOrder(ctx context.Context, user storage.Use
 					ctx,
 					user,
 					order,
-					*result.Accrual,
+					*result.Accrual(),
 				); err != nil {
 					logger.Errorf(
 						"Error occurred while trying to apply accrual amount to account: %s",

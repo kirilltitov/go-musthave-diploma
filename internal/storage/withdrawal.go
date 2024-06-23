@@ -48,8 +48,8 @@ func (s PgSQL) WithdrawBalanceFromAccount(ctx context.Context, user User, amount
 			return ErrInsufficientBalance
 		}
 
-		account.CurrentBalance.Sub(amount)
-		account.WithdrawnBalance.Add(amount)
+		account.CurrentBalance = account.CurrentBalance.Sub(amount)
+		account.WithdrawnBalance = account.WithdrawnBalance.Add(amount)
 
 		if err := saveAccount(ctx, tx, *account); err != nil {
 			return err

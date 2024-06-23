@@ -14,7 +14,7 @@ func (a *Application) HandlerGetOrders(w http.ResponseWriter, r *http.Request) {
 	type row struct {
 		Number     string              `json:"number"`
 		Status     storage.OrderStatus `json:"status"`
-		Accrual    float64             `json:"accrual"`
+		Accrual    *float64            `json:"accrual,omitempty"`
 		UploadedAt time.Time           `json:"uploaded_at"`
 	}
 
@@ -36,7 +36,11 @@ func (a *Application) HandlerGetOrders(w http.ResponseWriter, r *http.Request) {
 
 	var result []row
 	for _, order := range *orders {
-		accrual, _ := order.Amount.Float64()
+		var accrual *float64
+		if order.Amount != nil {
+			_accrual, _ := order.Amount.Float64()
+			accrual = &_accrual
+		}
 		result = append(result, row{
 			Number:     order.OrderNumber,
 			Status:     order.Status,
