@@ -23,7 +23,7 @@ func New() Config {
 func getServerAddress() string {
 	var result = flagBind
 
-	envServerAddress := os.Getenv("SERVER_ADDRESS")
+	envServerAddress := os.Getenv("RUN_ADDRESS")
 	if envServerAddress != "" {
 		result = envServerAddress
 	}
@@ -34,7 +34,7 @@ func getServerAddress() string {
 func getDatabaseDSN() string {
 	var result = flagDatabaseDSN
 
-	envDatabaseDSN := os.Getenv("DATABASE_DSN")
+	envDatabaseDSN := os.Getenv("DATABASE_URI")
 	if envDatabaseDSN != "" {
 		result = envDatabaseDSN
 	}
