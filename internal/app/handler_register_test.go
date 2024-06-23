@@ -114,6 +114,7 @@ func TestApplication_HandlerRegister(t *testing.T) {
 			a.HandlerRegister(w, r)
 
 			result := w.Result()
+			defer result.Body.Close()
 
 			assert.Equal(t, tt.want.code, result.StatusCode)
 			if tt.want.cookieSet {

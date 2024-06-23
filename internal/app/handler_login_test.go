@@ -117,6 +117,7 @@ func TestApplication_HandlerLogin(t *testing.T) {
 			a.HandlerLogin(w, r)
 
 			result := w.Result()
+			defer result.Body.Close()
 
 			assert.Equal(t, tt.want.code, result.StatusCode)
 			if tt.want.cookieSet {

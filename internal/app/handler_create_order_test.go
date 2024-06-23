@@ -198,6 +198,7 @@ func TestApplication_HandlerCreateOrder(t *testing.T) {
 			a.HandlerCreateOrder(w, r)
 
 			result := w.Result()
+			defer result.Body.Close()
 
 			assert.Equal(t, tt.want.code, result.StatusCode)
 		})
