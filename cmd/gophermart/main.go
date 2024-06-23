@@ -9,6 +9,8 @@ import (
 )
 
 func run() error {
+	utils.Log.Infof("Hello")
+
 	cfg := config.New()
 	ctx := context.Background()
 
