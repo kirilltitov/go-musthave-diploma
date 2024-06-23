@@ -1,6 +1,6 @@
 module github.com/kirilltitov/go-musthave-diploma
 
-go 1.22.0
+go 1.21.11
 
 require (
 	github.com/georgysavva/scany/v2 v2.1.3
