@@ -9,6 +9,7 @@ import (
 
 	"github.com/kirilltitov/go-musthave-diploma/internal/config"
 	"github.com/kirilltitov/go-musthave-diploma/internal/container"
+	mockStorage "github.com/kirilltitov/go-musthave-diploma/internal/mocks/storage"
 	"github.com/kirilltitov/go-musthave-diploma/internal/storage"
 )
 
@@ -57,7 +58,7 @@ func TestGophermart_Register(t *testing.T) {
 				login:    "frankstrino",
 				password: "hesoyam",
 				storage: func() storage.Storage {
-					s := storage.NewMockStorage(t)
+					s := mockStorage.NewMockStorage(t)
 					s.
 						EXPECT().
 						CreateUser(mock.Anything, mock.Anything).
@@ -78,7 +79,7 @@ func TestGophermart_Register(t *testing.T) {
 				login:    "frankstrino",
 				password: "hesoyam",
 				storage: func() storage.Storage {
-					s := storage.NewMockStorage(t)
+					s := mockStorage.NewMockStorage(t)
 					s.
 						EXPECT().
 						CreateUser(mock.Anything, mock.Anything).

@@ -5,6 +5,7 @@ package storage
 import (
 	context "context"
 
+	"github.com/kirilltitov/go-musthave-diploma/internal/storage"
 	decimal "github.com/shopspring/decimal"
 	mock "github.com/stretchr/testify/mock"
 )
@@ -23,7 +24,7 @@ func (_m *MockStorage) EXPECT() *MockStorage_Expecter {
 }
 
 // ApplyProcessedOrder provides a mock function with given fields: ctx, user, order, amount
-func (_m *MockStorage) ApplyProcessedOrder(ctx context.Context, user User, order Order, amount decimal.Decimal) error {
+func (_m *MockStorage) ApplyProcessedOrder(ctx context.Context, user storage.User, order storage.Order, amount decimal.Decimal) error {
 	ret := _m.Called(ctx, user, order, amount)
 
 	if len(ret) == 0 {
@@ -31,7 +32,7 @@ func (_m *MockStorage) ApplyProcessedOrder(ctx context.Context, user User, order
 	}
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(context.Context, User, Order, decimal.Decimal) error); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, storage.User, storage.Order, decimal.Decimal) error); ok {
 		r0 = rf(ctx, user, order, amount)
 	} else {
 		r0 = ret.Error(0)
@@ -54,9 +55,9 @@ func (_e *MockStorage_Expecter) ApplyProcessedOrder(ctx interface{}, user interf
 	return &MockStorage_ApplyProcessedOrder_Call{Call: _e.mock.On("ApplyProcessedOrder", ctx, user, order, amount)}
 }
 
-func (_c *MockStorage_ApplyProcessedOrder_Call) Run(run func(ctx context.Context, user User, order Order, amount decimal.Decimal)) *MockStorage_ApplyProcessedOrder_Call {
+func (_c *MockStorage_ApplyProcessedOrder_Call) Run(run func(ctx context.Context, user storage.User, order storage.Order, amount decimal.Decimal)) *MockStorage_ApplyProcessedOrder_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(context.Context), args[1].(User), args[2].(Order), args[3].(decimal.Decimal))
+		run(args[0].(context.Context), args[1].(storage.User), args[2].(storage.Order), args[3].(decimal.Decimal))
 	})
 	return _c
 }
@@ -66,13 +67,13 @@ func (_c *MockStorage_ApplyProcessedOrder_Call) Return(_a0 error) *MockStorage_A
 	return _c
 }
 
-func (_c *MockStorage_ApplyProcessedOrder_Call) RunAndReturn(run func(context.Context, User, Order, decimal.Decimal) error) *MockStorage_ApplyProcessedOrder_Call {
+func (_c *MockStorage_ApplyProcessedOrder_Call) RunAndReturn(run func(context.Context, storage.User, storage.Order, decimal.Decimal) error) *MockStorage_ApplyProcessedOrder_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // CreateOrder provides a mock function with given fields: ctx, order
-func (_m *MockStorage) CreateOrder(ctx context.Context, order Order) error {
+func (_m *MockStorage) CreateOrder(ctx context.Context, order storage.Order) error {
 	ret := _m.Called(ctx, order)
 
 	if len(ret) == 0 {
@@ -80,7 +81,7 @@ func (_m *MockStorage) CreateOrder(ctx context.Context, order Order) error {
 	}
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(context.Context, Order) error); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, storage.Order) error); ok {
 		r0 = rf(ctx, order)
 	} else {
 		r0 = ret.Error(0)
@@ -101,9 +102,9 @@ func (_e *MockStorage_Expecter) CreateOrder(ctx interface{}, order interface{}) 
 	return &MockStorage_CreateOrder_Call{Call: _e.mock.On("CreateOrder", ctx, order)}
 }
 
-func (_c *MockStorage_CreateOrder_Call) Run(run func(ctx context.Context, order Order)) *MockStorage_CreateOrder_Call {
+func (_c *MockStorage_CreateOrder_Call) Run(run func(ctx context.Context, order storage.Order)) *MockStorage_CreateOrder_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(context.Context), args[1].(Order))
+		run(args[0].(context.Context), args[1].(storage.Order))
 	})
 	return _c
 }
@@ -113,13 +114,13 @@ func (_c *MockStorage_CreateOrder_Call) Return(_a0 error) *MockStorage_CreateOrd
 	return _c
 }
 
-func (_c *MockStorage_CreateOrder_Call) RunAndReturn(run func(context.Context, Order) error) *MockStorage_CreateOrder_Call {
+func (_c *MockStorage_CreateOrder_Call) RunAndReturn(run func(context.Context, storage.Order) error) *MockStorage_CreateOrder_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // CreateUser provides a mock function with given fields: ctx, user
-func (_m *MockStorage) CreateUser(ctx context.Context, user User) error {
+func (_m *MockStorage) CreateUser(ctx context.Context, user storage.User) error {
 	ret := _m.Called(ctx, user)
 
 	if len(ret) == 0 {
@@ -127,7 +128,7 @@ func (_m *MockStorage) CreateUser(ctx context.Context, user User) error {
 	}
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(context.Context, User) error); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, storage.User) error); ok {
 		r0 = rf(ctx, user)
 	} else {
 		r0 = ret.Error(0)
@@ -148,9 +149,9 @@ func (_e *MockStorage_Expecter) CreateUser(ctx interface{}, user interface{}) *M
 	return &MockStorage_CreateUser_Call{Call: _e.mock.On("CreateUser", ctx, user)}
 }
 
-func (_c *MockStorage_CreateUser_Call) Run(run func(ctx context.Context, user User)) *MockStorage_CreateUser_Call {
+func (_c *MockStorage_CreateUser_Call) Run(run func(ctx context.Context, user storage.User)) *MockStorage_CreateUser_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(context.Context), args[1].(User))
+		run(args[0].(context.Context), args[1].(storage.User))
 	})
 	return _c
 }
@@ -160,33 +161,33 @@ func (_c *MockStorage_CreateUser_Call) Return(_a0 error) *MockStorage_CreateUser
 	return _c
 }
 
-func (_c *MockStorage_CreateUser_Call) RunAndReturn(run func(context.Context, User) error) *MockStorage_CreateUser_Call {
+func (_c *MockStorage_CreateUser_Call) RunAndReturn(run func(context.Context, storage.User) error) *MockStorage_CreateUser_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // LoadAccount provides a mock function with given fields: ctx, user
-func (_m *MockStorage) LoadAccount(ctx context.Context, user User) (*Account, error) {
+func (_m *MockStorage) LoadAccount(ctx context.Context, user storage.User) (*storage.Account, error) {
 	ret := _m.Called(ctx, user)
 
 	if len(ret) == 0 {
 		panic("no return value specified for LoadAccount")
 	}
 
-	var r0 *Account
+	var r0 *storage.Account
 	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, User) (*Account, error)); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, storage.User) (*storage.Account, error)); ok {
 		return rf(ctx, user)
 	}
-	if rf, ok := ret.Get(0).(func(context.Context, User) *Account); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, storage.User) *storage.Account); ok {
 		r0 = rf(ctx, user)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*Account)
+			r0 = ret.Get(0).(*storage.Account)
 		}
 	}
 
-	if rf, ok := ret.Get(1).(func(context.Context, User) error); ok {
+	if rf, ok := ret.Get(1).(func(context.Context, storage.User) error); ok {
 		r1 = rf(ctx, user)
 	} else {
 		r1 = ret.Error(1)
@@ -207,41 +208,41 @@ func (_e *MockStorage_Expecter) LoadAccount(ctx interface{}, user interface{}) *
 	return &MockStorage_LoadAccount_Call{Call: _e.mock.On("LoadAccount", ctx, user)}
 }
 
-func (_c *MockStorage_LoadAccount_Call) Run(run func(ctx context.Context, user User)) *MockStorage_LoadAccount_Call {
+func (_c *MockStorage_LoadAccount_Call) Run(run func(ctx context.Context, user storage.User)) *MockStorage_LoadAccount_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(context.Context), args[1].(User))
+		run(args[0].(context.Context), args[1].(storage.User))
 	})
 	return _c
 }
 
-func (_c *MockStorage_LoadAccount_Call) Return(_a0 *Account, _a1 error) *MockStorage_LoadAccount_Call {
+func (_c *MockStorage_LoadAccount_Call) Return(_a0 *storage.Account, _a1 error) *MockStorage_LoadAccount_Call {
 	_c.Call.Return(_a0, _a1)
 	return _c
 }
 
-func (_c *MockStorage_LoadAccount_Call) RunAndReturn(run func(context.Context, User) (*Account, error)) *MockStorage_LoadAccount_Call {
+func (_c *MockStorage_LoadAccount_Call) RunAndReturn(run func(context.Context, storage.User) (*storage.Account, error)) *MockStorage_LoadAccount_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // LoadOrder provides a mock function with given fields: ctx, orderNumber
-func (_m *MockStorage) LoadOrder(ctx context.Context, orderNumber string) (*Order, error) {
+func (_m *MockStorage) LoadOrder(ctx context.Context, orderNumber string) (*storage.Order, error) {
 	ret := _m.Called(ctx, orderNumber)
 
 	if len(ret) == 0 {
 		panic("no return value specified for LoadOrder")
 	}
 
-	var r0 *Order
+	var r0 *storage.Order
 	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, string) (*Order, error)); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, string) (*storage.Order, error)); ok {
 		return rf(ctx, orderNumber)
 	}
-	if rf, ok := ret.Get(0).(func(context.Context, string) *Order); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, string) *storage.Order); ok {
 		r0 = rf(ctx, orderNumber)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*Order)
+			r0 = ret.Get(0).(*storage.Order)
 		}
 	}
 
@@ -273,38 +274,38 @@ func (_c *MockStorage_LoadOrder_Call) Run(run func(ctx context.Context, orderNum
 	return _c
 }
 
-func (_c *MockStorage_LoadOrder_Call) Return(_a0 *Order, _a1 error) *MockStorage_LoadOrder_Call {
+func (_c *MockStorage_LoadOrder_Call) Return(_a0 *storage.Order, _a1 error) *MockStorage_LoadOrder_Call {
 	_c.Call.Return(_a0, _a1)
 	return _c
 }
 
-func (_c *MockStorage_LoadOrder_Call) RunAndReturn(run func(context.Context, string) (*Order, error)) *MockStorage_LoadOrder_Call {
+func (_c *MockStorage_LoadOrder_Call) RunAndReturn(run func(context.Context, string) (*storage.Order, error)) *MockStorage_LoadOrder_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // LoadOrders provides a mock function with given fields: ctx, user
-func (_m *MockStorage) LoadOrders(ctx context.Context, user User) (*[]Order, error) {
+func (_m *MockStorage) LoadOrders(ctx context.Context, user storage.User) (*[]storage.Order, error) {
 	ret := _m.Called(ctx, user)
 
 	if len(ret) == 0 {
 		panic("no return value specified for LoadOrders")
 	}
 
-	var r0 *[]Order
+	var r0 *[]storage.Order
 	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, User) (*[]Order, error)); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, storage.User) (*[]storage.Order, error)); ok {
 		return rf(ctx, user)
 	}
-	if rf, ok := ret.Get(0).(func(context.Context, User) *[]Order); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, storage.User) *[]storage.Order); ok {
 		r0 = rf(ctx, user)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*[]Order)
+			r0 = ret.Get(0).(*[]storage.Order)
 		}
 	}
 
-	if rf, ok := ret.Get(1).(func(context.Context, User) error); ok {
+	if rf, ok := ret.Get(1).(func(context.Context, storage.User) error); ok {
 		r1 = rf(ctx, user)
 	} else {
 		r1 = ret.Error(1)
@@ -325,41 +326,41 @@ func (_e *MockStorage_Expecter) LoadOrders(ctx interface{}, user interface{}) *M
 	return &MockStorage_LoadOrders_Call{Call: _e.mock.On("LoadOrders", ctx, user)}
 }
 
-func (_c *MockStorage_LoadOrders_Call) Run(run func(ctx context.Context, user User)) *MockStorage_LoadOrders_Call {
+func (_c *MockStorage_LoadOrders_Call) Run(run func(ctx context.Context, user storage.User)) *MockStorage_LoadOrders_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(context.Context), args[1].(User))
+		run(args[0].(context.Context), args[1].(storage.User))
 	})
 	return _c
 }
 
-func (_c *MockStorage_LoadOrders_Call) Return(_a0 *[]Order, _a1 error) *MockStorage_LoadOrders_Call {
+func (_c *MockStorage_LoadOrders_Call) Return(_a0 *[]storage.Order, _a1 error) *MockStorage_LoadOrders_Call {
 	_c.Call.Return(_a0, _a1)
 	return _c
 }
 
-func (_c *MockStorage_LoadOrders_Call) RunAndReturn(run func(context.Context, User) (*[]Order, error)) *MockStorage_LoadOrders_Call {
+func (_c *MockStorage_LoadOrders_Call) RunAndReturn(run func(context.Context, storage.User) (*[]storage.Order, error)) *MockStorage_LoadOrders_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // LoadUser provides a mock function with given fields: ctx, login
-func (_m *MockStorage) LoadUser(ctx context.Context, login string) (*User, error) {
+func (_m *MockStorage) LoadUser(ctx context.Context, login string) (*storage.User, error) {
 	ret := _m.Called(ctx, login)
 
 	if len(ret) == 0 {
 		panic("no return value specified for LoadUser")
 	}
 
-	var r0 *User
+	var r0 *storage.User
 	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, string) (*User, error)); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, string) (*storage.User, error)); ok {
 		return rf(ctx, login)
 	}
-	if rf, ok := ret.Get(0).(func(context.Context, string) *User); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, string) *storage.User); ok {
 		r0 = rf(ctx, login)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*User)
+			r0 = ret.Get(0).(*storage.User)
 		}
 	}
 
@@ -391,38 +392,38 @@ func (_c *MockStorage_LoadUser_Call) Run(run func(ctx context.Context, login str
 	return _c
 }
 
-func (_c *MockStorage_LoadUser_Call) Return(_a0 *User, _a1 error) *MockStorage_LoadUser_Call {
+func (_c *MockStorage_LoadUser_Call) Return(_a0 *storage.User, _a1 error) *MockStorage_LoadUser_Call {
 	_c.Call.Return(_a0, _a1)
 	return _c
 }
 
-func (_c *MockStorage_LoadUser_Call) RunAndReturn(run func(context.Context, string) (*User, error)) *MockStorage_LoadUser_Call {
+func (_c *MockStorage_LoadUser_Call) RunAndReturn(run func(context.Context, string) (*storage.User, error)) *MockStorage_LoadUser_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // LoadWithdrawals provides a mock function with given fields: ctx, user
-func (_m *MockStorage) LoadWithdrawals(ctx context.Context, user User) (*[]Withdrawal, error) {
+func (_m *MockStorage) LoadWithdrawals(ctx context.Context, user storage.User) (*[]storage.Withdrawal, error) {
 	ret := _m.Called(ctx, user)
 
 	if len(ret) == 0 {
 		panic("no return value specified for LoadWithdrawals")
 	}
 
-	var r0 *[]Withdrawal
+	var r0 *[]storage.Withdrawal
 	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, User) (*[]Withdrawal, error)); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, storage.User) (*[]storage.Withdrawal, error)); ok {
 		return rf(ctx, user)
 	}
-	if rf, ok := ret.Get(0).(func(context.Context, User) *[]Withdrawal); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, storage.User) *[]storage.Withdrawal); ok {
 		r0 = rf(ctx, user)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*[]Withdrawal)
+			r0 = ret.Get(0).(*[]storage.Withdrawal)
 		}
 	}
 
-	if rf, ok := ret.Get(1).(func(context.Context, User) error); ok {
+	if rf, ok := ret.Get(1).(func(context.Context, storage.User) error); ok {
 		r1 = rf(ctx, user)
 	} else {
 		r1 = ret.Error(1)
@@ -443,25 +444,25 @@ func (_e *MockStorage_Expecter) LoadWithdrawals(ctx interface{}, user interface{
 	return &MockStorage_LoadWithdrawals_Call{Call: _e.mock.On("LoadWithdrawals", ctx, user)}
 }
 
-func (_c *MockStorage_LoadWithdrawals_Call) Run(run func(ctx context.Context, user User)) *MockStorage_LoadWithdrawals_Call {
+func (_c *MockStorage_LoadWithdrawals_Call) Run(run func(ctx context.Context, user storage.User)) *MockStorage_LoadWithdrawals_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(context.Context), args[1].(User))
+		run(args[0].(context.Context), args[1].(storage.User))
 	})
 	return _c
 }
 
-func (_c *MockStorage_LoadWithdrawals_Call) Return(_a0 *[]Withdrawal, _a1 error) *MockStorage_LoadWithdrawals_Call {
+func (_c *MockStorage_LoadWithdrawals_Call) Return(_a0 *[]storage.Withdrawal, _a1 error) *MockStorage_LoadWithdrawals_Call {
 	_c.Call.Return(_a0, _a1)
 	return _c
 }
 
-func (_c *MockStorage_LoadWithdrawals_Call) RunAndReturn(run func(context.Context, User) (*[]Withdrawal, error)) *MockStorage_LoadWithdrawals_Call {
+func (_c *MockStorage_LoadWithdrawals_Call) RunAndReturn(run func(context.Context, storage.User) (*[]storage.Withdrawal, error)) *MockStorage_LoadWithdrawals_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // UpdateOrderStatus provides a mock function with given fields: ctx, order, newStatus, allowedOldStatuses
-func (_m *MockStorage) UpdateOrderStatus(ctx context.Context, order Order, newStatus OrderStatus, allowedOldStatuses []OrderStatus) error {
+func (_m *MockStorage) UpdateOrderStatus(ctx context.Context, order storage.Order, newStatus storage.OrderStatus, allowedOldStatuses []storage.OrderStatus) error {
 	ret := _m.Called(ctx, order, newStatus, allowedOldStatuses)
 
 	if len(ret) == 0 {
@@ -469,7 +470,7 @@ func (_m *MockStorage) UpdateOrderStatus(ctx context.Context, order Order, newSt
 	}
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(context.Context, Order, OrderStatus, []OrderStatus) error); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, storage.Order, storage.OrderStatus, []storage.OrderStatus) error); ok {
 		r0 = rf(ctx, order, newStatus, allowedOldStatuses)
 	} else {
 		r0 = ret.Error(0)
@@ -492,9 +493,9 @@ func (_e *MockStorage_Expecter) UpdateOrderStatus(ctx interface{}, order interfa
 	return &MockStorage_UpdateOrderStatus_Call{Call: _e.mock.On("UpdateOrderStatus", ctx, order, newStatus, allowedOldStatuses)}
 }
 
-func (_c *MockStorage_UpdateOrderStatus_Call) Run(run func(ctx context.Context, order Order, newStatus OrderStatus, allowedOldStatuses []OrderStatus)) *MockStorage_UpdateOrderStatus_Call {
+func (_c *MockStorage_UpdateOrderStatus_Call) Run(run func(ctx context.Context, order storage.Order, newStatus storage.OrderStatus, allowedOldStatuses []storage.OrderStatus)) *MockStorage_UpdateOrderStatus_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(context.Context), args[1].(Order), args[2].(OrderStatus), args[3].([]OrderStatus))
+		run(args[0].(context.Context), args[1].(storage.Order), args[2].(storage.OrderStatus), args[3].([]storage.OrderStatus))
 	})
 	return _c
 }
@@ -504,13 +505,13 @@ func (_c *MockStorage_UpdateOrderStatus_Call) Return(_a0 error) *MockStorage_Upd
 	return _c
 }
 
-func (_c *MockStorage_UpdateOrderStatus_Call) RunAndReturn(run func(context.Context, Order, OrderStatus, []OrderStatus) error) *MockStorage_UpdateOrderStatus_Call {
+func (_c *MockStorage_UpdateOrderStatus_Call) RunAndReturn(run func(context.Context, storage.Order, storage.OrderStatus, []storage.OrderStatus) error) *MockStorage_UpdateOrderStatus_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // WithdrawBalanceFromAccount provides a mock function with given fields: ctx, user, amount, order
-func (_m *MockStorage) WithdrawBalanceFromAccount(ctx context.Context, user User, amount decimal.Decimal, order string) error {
+func (_m *MockStorage) WithdrawBalanceFromAccount(ctx context.Context, user storage.User, amount decimal.Decimal, order string) error {
 	ret := _m.Called(ctx, user, amount, order)
 
 	if len(ret) == 0 {
@@ -518,7 +519,7 @@ func (_m *MockStorage) WithdrawBalanceFromAccount(ctx context.Context, user User
 	}
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(context.Context, User, decimal.Decimal, string) error); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, storage.User, decimal.Decimal, string) error); ok {
 		r0 = rf(ctx, user, amount, order)
 	} else {
 		r0 = ret.Error(0)
@@ -541,9 +542,9 @@ func (_e *MockStorage_Expecter) WithdrawBalanceFromAccount(ctx interface{}, user
 	return &MockStorage_WithdrawBalanceFromAccount_Call{Call: _e.mock.On("WithdrawBalanceFromAccount", ctx, user, amount, order)}
 }
 
-func (_c *MockStorage_WithdrawBalanceFromAccount_Call) Run(run func(ctx context.Context, user User, amount decimal.Decimal, order string)) *MockStorage_WithdrawBalanceFromAccount_Call {
+func (_c *MockStorage_WithdrawBalanceFromAccount_Call) Run(run func(ctx context.Context, user storage.User, amount decimal.Decimal, order string)) *MockStorage_WithdrawBalanceFromAccount_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(context.Context), args[1].(User), args[2].(decimal.Decimal), args[3].(string))
+		run(args[0].(context.Context), args[1].(storage.User), args[2].(decimal.Decimal), args[3].(string))
 	})
 	return _c
 }
@@ -553,7 +554,7 @@ func (_c *MockStorage_WithdrawBalanceFromAccount_Call) Return(_a0 error) *MockSt
 	return _c
 }
 
-func (_c *MockStorage_WithdrawBalanceFromAccount_Call) RunAndReturn(run func(context.Context, User, decimal.Decimal, string) error) *MockStorage_WithdrawBalanceFromAccount_Call {
+func (_c *MockStorage_WithdrawBalanceFromAccount_Call) RunAndReturn(run func(context.Context, storage.User, decimal.Decimal, string) error) *MockStorage_WithdrawBalanceFromAccount_Call {
 	_c.Call.Return(run)
 	return _c
 }

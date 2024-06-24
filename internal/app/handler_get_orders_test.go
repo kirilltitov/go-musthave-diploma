@@ -15,6 +15,7 @@ import (
 
 	"github.com/kirilltitov/go-musthave-diploma/internal/config"
 	"github.com/kirilltitov/go-musthave-diploma/internal/container"
+	mockStorage "github.com/kirilltitov/go-musthave-diploma/internal/mocks/storage"
 	"github.com/kirilltitov/go-musthave-diploma/internal/storage"
 	"github.com/kirilltitov/go-musthave-diploma/internal/utils"
 )
@@ -47,7 +48,7 @@ func TestApplication_HandlerGetOrders(t *testing.T) {
 			name: "Negative (unathorized)",
 			input: input{
 				cookie:  nil,
-				storage: storage.NewMockStorage(t),
+				storage: mockStorage.NewMockStorage(t),
 			},
 			want: want{
 				code: 401,
@@ -62,7 +63,7 @@ func TestApplication_HandlerGetOrders(t *testing.T) {
 				}(),
 				storage: func() storage.Storage {
 					orders := make([]storage.Order, 0)
-					s := storage.NewMockStorage(t)
+					s := mockStorage.NewMockStorage(t)
 					s.
 						EXPECT().
 						LoadOrders(mock.Anything, mock.Anything).
@@ -108,7 +109,7 @@ func TestApplication_HandlerGetOrders(t *testing.T) {
 							UpdatedAt: nil,
 						},
 					}
-					s := storage.NewMockStorage(t)
+					s := mockStorage.NewMockStorage(t)
 					s.
 						EXPECT().
 						LoadOrders(mock.Anything, mock.Anything).

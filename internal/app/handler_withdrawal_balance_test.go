@@ -13,6 +13,7 @@ import (
 
 	"github.com/kirilltitov/go-musthave-diploma/internal/config"
 	"github.com/kirilltitov/go-musthave-diploma/internal/container"
+	mockStorage "github.com/kirilltitov/go-musthave-diploma/internal/mocks/storage"
 	"github.com/kirilltitov/go-musthave-diploma/internal/storage"
 	"github.com/kirilltitov/go-musthave-diploma/internal/utils"
 )
@@ -46,7 +47,7 @@ func TestApplication_HandlerWithdrawBalance(t *testing.T) {
 			input: input{
 				cookie:  nil,
 				body:    `{}`,
-				storage: storage.NewMockStorage(t),
+				storage: mockStorage.NewMockStorage(t),
 			},
 			want: want{
 				code: 401,
@@ -60,7 +61,7 @@ func TestApplication_HandlerWithdrawBalance(t *testing.T) {
 					return cookie
 				}(),
 				body:    `{"order":"lul","sum":0}`,
-				storage: storage.NewMockStorage(t),
+				storage: mockStorage.NewMockStorage(t),
 			},
 			want: want{
 				code: 422,
@@ -74,7 +75,7 @@ func TestApplication_HandlerWithdrawBalance(t *testing.T) {
 					return cookie
 				}(),
 				body:    `{"order":"1111","sum":0}`,
-				storage: storage.NewMockStorage(t),
+				storage: mockStorage.NewMockStorage(t),
 			},
 			want: want{
 				code: 422,
@@ -89,7 +90,7 @@ func TestApplication_HandlerWithdrawBalance(t *testing.T) {
 				}(),
 				body: `{"order":"79927398713","sum":1337}`,
 				storage: func() storage.Storage {
-					s := storage.NewMockStorage(t)
+					s := mockStorage.NewMockStorage(t)
 					s.
 						EXPECT().
 						WithdrawBalanceFromAccount(mock.Anything, mock.Anything, mock.Anything, mock.Anything).
@@ -110,7 +111,7 @@ func TestApplication_HandlerWithdrawBalance(t *testing.T) {
 				}(),
 				body: `{"order":"79927398713","sum":322}`,
 				storage: func() storage.Storage {
-					s := storage.NewMockStorage(t)
+					s := mockStorage.NewMockStorage(t)
 					s.
 						EXPECT().
 						WithdrawBalanceFromAccount(mock.Anything, mock.Anything, mock.Anything, mock.Anything).

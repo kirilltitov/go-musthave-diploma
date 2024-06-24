@@ -14,6 +14,7 @@ import (
 
 	"github.com/kirilltitov/go-musthave-diploma/internal/config"
 	"github.com/kirilltitov/go-musthave-diploma/internal/container"
+	mockStorage "github.com/kirilltitov/go-musthave-diploma/internal/mocks/storage"
 	"github.com/kirilltitov/go-musthave-diploma/internal/storage"
 	"github.com/kirilltitov/go-musthave-diploma/internal/utils"
 )
@@ -46,7 +47,7 @@ func TestApplication_HandlerGetBalance(t *testing.T) {
 			name: "Negative (unathorized)",
 			input: input{
 				cookie:  nil,
-				storage: storage.NewMockStorage(t),
+				storage: mockStorage.NewMockStorage(t),
 			},
 			want: want{
 				code: 401,
@@ -65,7 +66,7 @@ func TestApplication_HandlerGetBalance(t *testing.T) {
 						CurrentBalance:   decimal.NewFromFloat(13.37),
 						WithdrawnBalance: decimal.NewFromFloat(3.22),
 					}
-					s := storage.NewMockStorage(t)
+					s := mockStorage.NewMockStorage(t)
 					s.
 						EXPECT().
 						LoadAccount(mock.Anything, mock.Anything).

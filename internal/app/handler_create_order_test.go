@@ -15,6 +15,8 @@ import (
 	"github.com/kirilltitov/go-musthave-diploma/internal/accrual"
 	"github.com/kirilltitov/go-musthave-diploma/internal/config"
 	"github.com/kirilltitov/go-musthave-diploma/internal/container"
+	mockAccrual "github.com/kirilltitov/go-musthave-diploma/internal/mocks/accrual"
+	mockStorage "github.com/kirilltitov/go-musthave-diploma/internal/mocks/storage"
 	"github.com/kirilltitov/go-musthave-diploma/internal/storage"
 	"github.com/kirilltitov/go-musthave-diploma/internal/utils"
 )
@@ -23,7 +25,7 @@ func TestApplication_HandlerCreateOrder(t *testing.T) {
 	cfg := config.Config{}
 	ctx := context.Background()
 
-	accrualMock := accrual.NewMockAccrual(t)
+	accrualMock := mockAccrual.NewMockAccrual(t)
 	accrualMock.EXPECT().CalculateAmount(mock.Anything).Maybe().Return(nil, accrual.ErrNoOrder)
 	cnt := container.Container{Storage: nil, Accrual: accrualMock}
 
@@ -54,7 +56,7 @@ func TestApplication_HandlerCreateOrder(t *testing.T) {
 			input: input{
 				cookie:  nil,
 				body:    nil,
-				storage: storage.NewMockStorage(t),
+				storage: mockStorage.NewMockStorage(t),
 			},
 			want: want{
 				code: 401,
@@ -68,7 +70,7 @@ func TestApplication_HandlerCreateOrder(t *testing.T) {
 					return cookie
 				}(),
 				body:    nil,
-				storage: storage.NewMockStorage(t),
+				storage: mockStorage.NewMockStorage(t),
 			},
 			want: want{
 				code: 400,
@@ -82,7 +84,7 @@ func TestApplication_HandlerCreateOrder(t *testing.T) {
 					return cookie
 				}(),
 				body:    &invalidOrderNumber,
-				storage: storage.NewMockStorage(t),
+				storage: mockStorage.NewMockStorage(t),
 			},
 			want: want{
 				code: 422,
@@ -97,7 +99,7 @@ func TestApplication_HandlerCreateOrder(t *testing.T) {
 				}(),
 				body: &validOrderNumber,
 				storage: func() storage.Storage {
-					s := storage.NewMockStorage(t)
+					s := mockStorage.NewMockStorage(t)
 					s.
 						EXPECT().
 						LoadOrder(mock.Anything, mock.Anything).
@@ -118,7 +120,7 @@ func TestApplication_HandlerCreateOrder(t *testing.T) {
 				}(),
 				body: &validOrderNumber,
 				storage: func() storage.Storage {
-					s := storage.NewMockStorage(t)
+					s := mockStorage.NewMockStorage(t)
 					s.
 						EXPECT().
 						LoadOrder(mock.Anything, mock.Anything).
@@ -143,7 +145,7 @@ func TestApplication_HandlerCreateOrder(t *testing.T) {
 				}(),
 				body: &validOrderNumber,
 				storage: func() storage.Storage {
-					s := storage.NewMockStorage(t)
+					s := mockStorage.NewMockStorage(t)
 					s.
 						EXPECT().
 						LoadOrder(mock.Anything, mock.Anything).
@@ -164,7 +166,7 @@ func TestApplication_HandlerCreateOrder(t *testing.T) {
 				}(),
 				body: &validOrderNumber,
 				storage: func() storage.Storage {
-					s := storage.NewMockStorage(t)
+					s := mockStorage.NewMockStorage(t)
 					s.
 						EXPECT().
 						LoadOrder(mock.Anything, mock.Anything).

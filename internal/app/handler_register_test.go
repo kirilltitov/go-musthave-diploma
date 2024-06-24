@@ -13,6 +13,7 @@ import (
 
 	"github.com/kirilltitov/go-musthave-diploma/internal/config"
 	"github.com/kirilltitov/go-musthave-diploma/internal/container"
+	mockStorage "github.com/kirilltitov/go-musthave-diploma/internal/mocks/storage"
 	"github.com/kirilltitov/go-musthave-diploma/internal/storage"
 )
 
@@ -41,7 +42,7 @@ func TestApplication_HandlerRegister(t *testing.T) {
 			name: "Negative (invalid request 1)",
 			input: input{
 				body:    `invalid`,
-				storage: storage.NewMockStorage(t),
+				storage: mockStorage.NewMockStorage(t),
 			},
 			want: want{
 				code: 400,
@@ -51,7 +52,7 @@ func TestApplication_HandlerRegister(t *testing.T) {
 			name: "Negative (invalid request 2)",
 			input: input{
 				body:    `{}`,
-				storage: storage.NewMockStorage(t),
+				storage: mockStorage.NewMockStorage(t),
 			},
 			want: want{
 				code: 400,
@@ -61,7 +62,7 @@ func TestApplication_HandlerRegister(t *testing.T) {
 			name: "Negative (invalid request 3)",
 			input: input{
 				body:    `{"login":"frankstrino","passworddd":"hesoyam"}`,
-				storage: storage.NewMockStorage(t),
+				storage: mockStorage.NewMockStorage(t),
 			},
 			want: want{
 				code: 400,
@@ -72,7 +73,7 @@ func TestApplication_HandlerRegister(t *testing.T) {
 			input: input{
 				body: `{"login":"frankstrino","password":"hesoyam"}`,
 				storage: func() storage.Storage {
-					s := storage.NewMockStorage(t)
+					s := mockStorage.NewMockStorage(t)
 					s.
 						EXPECT().
 						CreateUser(mock.Anything, mock.Anything).
@@ -90,7 +91,7 @@ func TestApplication_HandlerRegister(t *testing.T) {
 			input: input{
 				body: `{"login":"frankstrino","password":"hesoyam"}`,
 				storage: func() storage.Storage {
-					s := storage.NewMockStorage(t)
+					s := mockStorage.NewMockStorage(t)
 					s.
 						EXPECT().
 						CreateUser(mock.Anything, mock.Anything).

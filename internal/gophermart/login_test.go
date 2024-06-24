@@ -5,15 +5,16 @@ import (
 	"testing"
 	"time"
 
-	"github.com/kirilltitov/go-musthave-diploma/internal/config"
-	"github.com/kirilltitov/go-musthave-diploma/internal/container"
-	"github.com/kirilltitov/go-musthave-diploma/internal/storage"
-	"github.com/kirilltitov/go-musthave-diploma/internal/utils"
-
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
+
+	"github.com/kirilltitov/go-musthave-diploma/internal/config"
+	"github.com/kirilltitov/go-musthave-diploma/internal/container"
+	mockStorage "github.com/kirilltitov/go-musthave-diploma/internal/mocks/storage"
+	"github.com/kirilltitov/go-musthave-diploma/internal/storage"
+	"github.com/kirilltitov/go-musthave-diploma/internal/utils"
 )
 
 func TestGophermart_Login(t *testing.T) {
@@ -43,7 +44,7 @@ func TestGophermart_Login(t *testing.T) {
 				login:    `some`,
 				password: `incorrect`,
 				storage: func() storage.Storage {
-					s := storage.NewMockStorage(t)
+					s := mockStorage.NewMockStorage(t)
 					s.
 						EXPECT().
 						LoadUser(mock.Anything, mock.Anything).
@@ -73,7 +74,7 @@ func TestGophermart_Login(t *testing.T) {
 					login:    "frankstrino",
 					password: "hesoyam",
 					storage: func() storage.Storage {
-						s := storage.NewMockStorage(t)
+						s := mockStorage.NewMockStorage(t)
 						s.
 							EXPECT().
 							LoadUser(mock.Anything, mock.Anything).

@@ -3,6 +3,7 @@
 package accrual
 
 import (
+	"github.com/kirilltitov/go-musthave-diploma/internal/accrual"
 	storage "github.com/kirilltitov/go-musthave-diploma/internal/storage"
 	mock "github.com/stretchr/testify/mock"
 )
@@ -21,23 +22,23 @@ func (_m *MockAccrual) EXPECT() *MockAccrual_Expecter {
 }
 
 // CalculateAmount provides a mock function with given fields: order
-func (_m *MockAccrual) CalculateAmount(order storage.Order) (*CalculationResult, error) {
+func (_m *MockAccrual) CalculateAmount(order storage.Order) (*accrual.CalculationResult, error) {
 	ret := _m.Called(order)
 
 	if len(ret) == 0 {
 		panic("no return value specified for CalculateAmount")
 	}
 
-	var r0 *CalculationResult
+	var r0 *accrual.CalculationResult
 	var r1 error
-	if rf, ok := ret.Get(0).(func(storage.Order) (*CalculationResult, error)); ok {
+	if rf, ok := ret.Get(0).(func(storage.Order) (*accrual.CalculationResult, error)); ok {
 		return rf(order)
 	}
-	if rf, ok := ret.Get(0).(func(storage.Order) *CalculationResult); ok {
+	if rf, ok := ret.Get(0).(func(storage.Order) *accrual.CalculationResult); ok {
 		r0 = rf(order)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*CalculationResult)
+			r0 = ret.Get(0).(*accrual.CalculationResult)
 		}
 	}
 
@@ -68,12 +69,12 @@ func (_c *MockAccrual_CalculateAmount_Call) Run(run func(order storage.Order)) *
 	return _c
 }
 
-func (_c *MockAccrual_CalculateAmount_Call) Return(_a0 *CalculationResult, _a1 error) *MockAccrual_CalculateAmount_Call {
+func (_c *MockAccrual_CalculateAmount_Call) Return(_a0 *accrual.CalculationResult, _a1 error) *MockAccrual_CalculateAmount_Call {
 	_c.Call.Return(_a0, _a1)
 	return _c
 }
 
-func (_c *MockAccrual_CalculateAmount_Call) RunAndReturn(run func(storage.Order) (*CalculationResult, error)) *MockAccrual_CalculateAmount_Call {
+func (_c *MockAccrual_CalculateAmount_Call) RunAndReturn(run func(storage.Order) (*accrual.CalculationResult, error)) *MockAccrual_CalculateAmount_Call {
 	_c.Call.Return(run)
 	return _c
 }
