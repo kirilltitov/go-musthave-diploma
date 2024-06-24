@@ -20,7 +20,7 @@ func (a *Application) HandlerCreateOrder(w http.ResponseWriter, r *http.Request)
 	defer r.Body.Close()
 
 	if _, err := buf.ReadFrom(r.Body); err != nil {
-		utils.Log.Infof("Could not get body: %v", err)
+		utils.Log.Errorf("Could not get body: %v", err)
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
@@ -31,17 +31,18 @@ func (a *Application) HandlerCreateOrder(w http.ResponseWriter, r *http.Request)
 	}
 
 	if err := a.Gophermart.CreateOrder(r.Context(), *user, orderNumber); err != nil {
-		utils.Log.Infof("Error while creating order: %v", err)
-		if errors.Is(err, gophermart.ErrInvalidOrderNumber) {
+		utils.Log.Errorf("Error while creating order: %v", err)
+		switch {
+		case errors.Is(err, gophermart.ErrInvalidOrderNumber):
 			w.WriteHeader(http.StatusUnprocessableEntity)
 			return
-		} else if errors.Is(err, gophermart.ErrOrderAlreadyUploaded) {
+		case errors.Is(err, gophermart.ErrOrderAlreadyUploaded):
 			w.WriteHeader(http.StatusOK)
 			return
-		} else if errors.Is(err, gophermart.ErrNotYourOrder) {
+		case errors.Is(err, gophermart.ErrNotYourOrder):
 			w.WriteHeader(http.StatusConflict)
 			return
-		} else {
+		default:
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}

@@ -35,6 +35,12 @@ func (s PgSQL) ApplyProcessedOrder(ctx context.Context, user User, order Order, 
 			return err
 		}
 
+		log.Debugf(
+			"Adding acrrual '%f' to balance '%f' = '%f'",
+			amount.InexactFloat64(),
+			account.CurrentBalance.InexactFloat64(),
+			account.CurrentBalance.Add(amount).InexactFloat64(),
+		)
 		account.CurrentBalance = account.CurrentBalance.Add(amount)
 		if err := saveAccount(ctx, tx, *account); err != nil {
 			return err

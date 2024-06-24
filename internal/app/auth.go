@@ -17,14 +17,8 @@ type Claims struct {
 
 type UserID uuid.UUID
 
-const (
-	JWTCookieName = "access_token"
-	JWTSecret     = "hesoyam"
-	JWTTimeToLive = 86400
-)
-
 func (a *Application) createAuthCookie(user storage.User) (*http.Cookie, error) {
-	exp := time.Now().Add(time.Second * JWTTimeToLive)
+	exp := time.Now().Add(time.Second * time.Duration(a.Config.JWTTimeToLive))
 	token := jwt.NewWithClaims(
 		jwt.SigningMethodHS256,
 		Claims{
@@ -35,13 +29,13 @@ func (a *Application) createAuthCookie(user storage.User) (*http.Cookie, error) 
 		},
 	)
 
-	tokenString, err := token.SignedString([]byte(JWTSecret))
+	tokenString, err := token.SignedString([]byte(a.Config.JWTSecret))
 	if err != nil {
 		return nil, err
 	}
 
 	cookie := http.Cookie{
-		Name:    JWTCookieName,
+		Name:    a.Config.JWTCookieName,
 		Value:   tokenString,
 		Expires: exp,
 	}
@@ -50,7 +44,7 @@ func (a *Application) createAuthCookie(user storage.User) (*http.Cookie, error) 
 }
 
 func (a *Application) authenticate(r *http.Request) (*storage.User, error) {
-	cookie, err := r.Cookie(JWTCookieName)
+	cookie, err := r.Cookie(a.Config.JWTCookieName)
 	if err != nil {
 		return nil, err
 	}
@@ -58,7 +52,7 @@ func (a *Application) authenticate(r *http.Request) (*storage.User, error) {
 	claims := &Claims{}
 
 	token, err := jwt.ParseWithClaims(cookie.Value, claims, func(t *jwt.Token) (interface{}, error) {
-		return []byte(JWTSecret), nil
+		return []byte(a.Config.JWTSecret), nil
 	})
 
 	if err != nil || !token.Valid {

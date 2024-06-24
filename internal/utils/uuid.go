@@ -3,6 +3,9 @@ package utils
 import "github.com/google/uuid"
 
 func NewUUID6() uuid.UUID {
-	result, _ := uuid.NewV6()
+	result, err := uuid.NewV6()
+	if err != nil {
+		panic(err)
+	}
 	return result
 }

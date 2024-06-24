@@ -11,6 +11,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 	"github.com/kirilltitov/go-musthave-diploma/internal/utils"
+	"github.com/kirilltitov/go-musthave-diploma/pkg/utils/arrays"
 	"github.com/shopspring/decimal"
 )
 
@@ -101,7 +102,7 @@ func updateOrderStatus(ctx context.Context, tx pgx.Tx, order Order, newStatus Or
 	if orderFromDB == nil {
 		return ErrNotFound
 	}
-	if len(allowedOldStatuses) > 0 && !utils.InArray(allowedOldStatuses, orderFromDB.Status) {
+	if len(allowedOldStatuses) > 0 && !arrays.IsInArray(allowedOldStatuses, orderFromDB.Status) {
 		utils.Log.Errorf(
 			"Unexpected status '%s' for order %s (expected %v), exiting",
 			orderFromDB.Status, orderFromDB.OrderNumber, allowedOldStatuses,

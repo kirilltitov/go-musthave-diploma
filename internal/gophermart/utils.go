@@ -6,9 +6,9 @@ import (
 	"github.com/theplant/luhn"
 )
 
-func validateOrderNumber(order string) error {
-	orderInt, err := strconv.Atoi(order)
-	if err != nil || !luhn.Valid(orderInt) {
+func checkOrderNumber(order string) error {
+	orderInt, err := strconv.ParseInt(order, 10, 64)
+	if err != nil || !luhn.Valid(int(orderInt)) {
 		return ErrInvalidOrderNumber
 	}
 

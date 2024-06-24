@@ -30,16 +30,3 @@ func New(ctx context.Context, cfg config.Config) (*Container, error) {
 		),
 	}, nil
 }
-
-func newPgSQLStorage(ctx context.Context, cfg config.Config) (*storage.PgSQL, error) {
-	s, err := storage.New(ctx, cfg.DatabaseDSN)
-	if err != nil {
-		return nil, err
-	}
-
-	if err := s.InitDB(ctx); err != nil {
-		return nil, err
-	}
-
-	return s, nil
-}

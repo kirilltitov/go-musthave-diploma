@@ -24,11 +24,15 @@ type CalculationResult struct {
 }
 
 func (r CalculationResult) Accrual() *decimal.Decimal {
-	if r.AccrualRaw == nil {
+	return decimalPtrFromFloat(r.AccrualRaw)
+}
+
+func decimalPtrFromFloat(f *float64) *decimal.Decimal {
+	if f == nil {
 		return nil
 	}
 
-	result := decimal.NewFromFloat(*r.AccrualRaw)
+	result := decimal.NewFromFloat(*f)
 
 	return &result
 }

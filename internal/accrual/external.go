@@ -1,9 +1,9 @@
 package accrual
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 	"strconv"
 	"time"
@@ -29,20 +29,25 @@ func (a ExternalAccrual) CalculateAmount(order storage.Order) (*CalculationResul
 	url := fmt.Sprintf(`%s/api/orders/%s`, a.cfg.Address, order.OrderNumber)
 	logger.Infof("About to call external accrual system at '%s'", url)
 	resp, err := a.Client.Get(url)
+	defer resp.Body.Close()
 
 	if err != nil {
-		logger.Infof("Got error from accrual system call: %v", err)
+		logger.Errorf("Got error from accrual system call: %v", err)
 		return nil, err
 	}
 
 	if resp.StatusCode != http.StatusOK {
-		logger.Infof("HTTP status from accrual system call is not 200: %d", resp.StatusCode)
+		logger.Errorf("HTTP status from accrual system call is not 200: %d", resp.StatusCode)
 		var result error
 		switch resp.StatusCode {
 		case http.StatusNoContent:
 			result = ErrNoOrder
 		case http.StatusTooManyRequests:
-			retryAfter, _ := strconv.Atoi(resp.Header.Get("Retry-After"))
+			retryAfter, err := strconv.Atoi(resp.Header.Get("Retry-After"))
+			if err != nil {
+				logger.Errorf("Could not convert Retry-After header to int: %+v", err)
+				return nil, err
+			}
 			if retryAfter == 0 {
 				retryAfter = 10
 			}
@@ -55,16 +60,16 @@ func (a ExternalAccrual) CalculateAmount(order storage.Order) (*CalculationResul
 
 	var result CalculationResult
 
-	var buf bytes.Buffer
 	defer resp.Body.Close()
 
-	if _, err := buf.ReadFrom(resp.Body); err != nil {
-		logger.Infof("Could not get body: %v", err)
+	buf, err := io.ReadAll(resp.Body)
+	if err != nil {
+		logger.Errorf("Could not get body: %v", err)
 		return nil, err
 	}
 
-	if err := json.Unmarshal(buf.Bytes(), &result); err != nil {
-		logger.Infof("Could not parse JSON from '%s': %+v", buf.String(), err)
+	if err := json.Unmarshal(buf, &result); err != nil {
+		logger.Errorf("Could not parse JSON from '%s': %+v", string(buf), err)
 		return nil, err
 	}
 

@@ -28,6 +28,6 @@ func main() {
 	utils.Log.Infof("Hello from main")
 
 	if err := run(); err != nil {
-		panic(err)
+		utils.Log.Fatal(err)
 	}
 }

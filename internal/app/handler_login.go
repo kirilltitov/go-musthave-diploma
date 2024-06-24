@@ -24,11 +24,12 @@ func (a *Application) HandlerLogin(w http.ResponseWriter, r *http.Request) {
 
 	user, err := a.Gophermart.Login(r.Context(), req.Login, req.Password)
 	if err != nil {
-		log.Infof("Error while logging in: %v", err)
+		log.Errorf("Error while logging in: %v", err)
 		var code int
-		if errors.Is(err, gophermart.ErrAuthFailed) {
+		switch {
+		case errors.Is(err, gophermart.ErrAuthFailed):
 			code = http.StatusUnauthorized
-		} else {
+		default:
 			code = http.StatusInternalServerError
 		}
 		w.WriteHeader(code)
@@ -37,7 +38,7 @@ func (a *Application) HandlerLogin(w http.ResponseWriter, r *http.Request) {
 
 	cookie, err := a.createAuthCookie(*user)
 	if err != nil {
-		log.Infof("Error while issuing cookie: %v", err)
+		log.Errorf("Error while issuing cookie: %v", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}

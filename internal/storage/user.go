@@ -23,11 +23,11 @@ type User struct {
 	CreatedAt time.Time `db:"created_at"`
 }
 
-func (u User) IsValidPassword(password string) bool {
+func (u *User) IsValidPassword(password string) bool {
 	return u.getHashedPassword(password) == u.Password
 }
 
-func (u User) getHashedPassword(rawPassword string) string {
+func (u *User) getHashedPassword(rawPassword string) string {
 	dt := strconv.FormatInt(u.CreatedAt.Unix(), 10)
 
 	h := sha1.New()

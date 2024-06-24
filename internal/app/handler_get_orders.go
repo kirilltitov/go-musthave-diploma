@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/kirilltitov/go-musthave-diploma/internal/storage"
+	"github.com/kirilltitov/go-musthave-diploma/internal/utils"
 )
 
 func (a *Application) HandlerGetOrders(w http.ResponseWriter, r *http.Request) {
@@ -34,25 +35,28 @@ func (a *Application) HandlerGetOrders(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var result []row
-	for _, order := range *orders {
+	result := make([]row, len(*orders))
+	for i, order := range *orders {
 		var accrual *float64
 		if order.Amount != nil {
 			_accrual, _ := order.Amount.Float64()
 			accrual = &_accrual
 		}
-		result = append(result, row{
+		result[i] = row{
 			Number:     order.OrderNumber,
 			Status:     order.Status,
 			Accrual:    accrual,
 			UploadedAt: order.CreatedAt,
-		})
+		}
 	}
 
 	responseBytes, err := json.Marshal(result)
 	if err != nil {
-		panic(err)
+		utils.Log.Errorf("Error during marshal: %+v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
 	}
+
 	w.WriteHeader(http.StatusOK)
 	w.Write(responseBytes)
 }

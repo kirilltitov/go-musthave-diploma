@@ -14,6 +14,8 @@ import (
 )
 
 func TestGophermart_Register(t *testing.T) {
+	t.Parallel()
+
 	cfg := config.New()
 	ctx := context.Background()
 	cnt := container.Container{Storage: nil}

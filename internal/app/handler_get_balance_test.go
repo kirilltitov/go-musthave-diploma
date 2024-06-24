@@ -21,6 +21,9 @@ import (
 
 func TestApplication_HandlerGetBalance(t *testing.T) {
 	cfg := config.Config{}
+	cfg.JWTCookieName = "access_token"
+	cfg.JWTSecret = "hesoyam"
+	cfg.JWTTimeToLive = 86400
 	ctx := context.Background()
 	cnt := container.Container{Storage: nil}
 

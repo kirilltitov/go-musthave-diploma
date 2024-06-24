@@ -25,13 +25,14 @@ func (a *Application) HandlerRegister(w http.ResponseWriter, r *http.Request) {
 
 	user, err := a.Gophermart.Register(r.Context(), req.Login, req.Password)
 	if err != nil {
-		log.Infof("Error while registering new user: %v", err)
+		log.Errorf("Error while registering new user: %v", err)
 		var code int
-		if errors.Is(err, storage.ErrDuplicateFound) {
+		switch {
+		case errors.Is(err, storage.ErrDuplicateFound):
 			code = http.StatusConflict
-		} else if errors.Is(err, gophermart.ErrEmptyLogin) || errors.Is(err, gophermart.ErrEmptyPassword) {
+		case errors.Is(err, gophermart.ErrEmptyLogin), errors.Is(err, gophermart.ErrEmptyPassword):
 			code = http.StatusBadRequest
-		} else {
+		default:
 			code = http.StatusInternalServerError
 		}
 		w.WriteHeader(code)
@@ -40,7 +41,7 @@ func (a *Application) HandlerRegister(w http.ResponseWriter, r *http.Request) {
 
 	cookie, err := a.createAuthCookie(*user)
 	if err != nil {
-		log.Infof("Error while issuing cookie: %v", err)
+		log.Errorf("Error while issuing cookie: %v", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}

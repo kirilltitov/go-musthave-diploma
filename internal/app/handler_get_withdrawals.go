@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"net/http"
 	"time"
+
+	"github.com/kirilltitov/go-musthave-diploma/internal/utils"
 )
 
 func (a *Application) HandlerGetWithdrawals(w http.ResponseWriter, r *http.Request) {
@@ -31,20 +33,23 @@ func (a *Application) HandlerGetWithdrawals(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	var result []row
-	for _, withdrawal := range *withdrawals {
+	result := make([]row, len(*withdrawals))
+	for i, withdrawal := range *withdrawals {
 		sum, _ := withdrawal.Amount.Float64()
-		result = append(result, row{
+		result[i] = row{
 			Order:       withdrawal.OrderNumber,
 			Sum:         sum,
 			ProcessedAt: withdrawal.CreatedAt,
-		})
+		}
 	}
 
 	responseBytes, err := json.Marshal(result)
 	if err != nil {
-		panic(err)
+		utils.Log.Errorf("Error during unmarshal: %+v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
 	}
+
 	w.WriteHeader(http.StatusOK)
 	w.Write(responseBytes)
 }

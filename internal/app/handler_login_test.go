@@ -20,6 +20,8 @@ import (
 )
 
 func TestApplication_HandlerLogin(t *testing.T) {
+	t.Parallel()
+
 	cfg := config.New()
 	ctx := context.Background()
 	cnt := container.Container{Storage: nil}
