@@ -29,12 +29,12 @@ func (a ExternalAccrual) CalculateAmount(order storage.Order) (*CalculationResul
 	url := fmt.Sprintf(`%s/api/orders/%s`, a.cfg.Address, order.OrderNumber)
 	logger.Infof("About to call external accrual system at '%s'", url)
 	resp, err := a.Client.Get(url)
-	defer resp.Body.Close()
 
 	if err != nil {
 		logger.Errorf("Got error from accrual system call: %v", err)
 		return nil, err
 	}
+	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
 		logger.Errorf("HTTP status from accrual system call is not 200: %d", resp.StatusCode)
